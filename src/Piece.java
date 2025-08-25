@@ -1,17 +1,24 @@
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.*;
 
-abstract public class Piece {
-    char color;
-    String type;
+abstract class Piece {
     ImageIcon icon;
-    JLabel label;
+    String name;
+    String color;
+    int row, col;
+    boolean alive = true;
 
-    // position, is_valid_move
-    public Piece(char color, String type) {
+    public Piece(String name, String color, int row, int col, ImageIcon icon) {
+        this.name = name;
         this.color = color;
-        this.type = type;
-
+        this.row = row;
+        this.col = col;
+        this.icon = icon;
     }
 
+    abstract boolean isValidMove(int newRow, int newCol, Piece[][] board);
+
+    void move(int newRow, int newCol) {
+        this.row = newRow;
+        this.col = newCol;
+    }
 }
