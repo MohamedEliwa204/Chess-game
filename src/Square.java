@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,21 +11,32 @@ public class Square extends JLabel implements ActionListener {
 
     String piece = null; // -> will modify to be class after making pieces class.
     JButton button;
+    char row;
+    char col;
 
-    public Square(Color c) {
+    public Square(Color c, char row, char col) {
 
         button = new JButton();
-        button.setBounds(this.getBounds());
-
+        this.setLayout(new BorderLayout());
+        this.row = row;
+        this.col = col;
         // to make the button with no animation
         button.setFocusPainted(false);
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
-
-        this.add(button);
+        button.addActionListener(this);
+        this.add(button, BorderLayout.CENTER);
         this.setBackground(c);
         this.setOpaque(true);
 
+    }
+
+    public char getRow() {
+        return row;
+    }
+
+    public char getCol() {
+        return col;
     }
 
     public boolean isEmpty() {
@@ -47,7 +59,9 @@ public class Square extends JLabel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button) {
             // will be implemented
+            System.out.printf("hello in my square! (%c,%c)%n", row, col);
         }
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+        // throw new UnsupportedOperationException("Unimplemented method
+        // 'actionPerformed'");
     }
 }
