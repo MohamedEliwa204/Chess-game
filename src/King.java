@@ -8,12 +8,12 @@ public class King extends Piece{
     }
 
     @Override
-    boolean isValidMove(int newRow, int newCol,Piece[][] board) { // i am using a board of pieces could be changed to be of squares
-        // to know whether this part of the board contains a piece of the same or different color or if it is empty
+    boolean isValidMove(int newRow, int newCol,Square[][] board) {
+
         int absRow = Math.abs(row-newRow);
         int absCol = Math.abs(col-newCol);
-        Piece target = board[newRow][newCol];
-        if((absCol<=1 && absRow<=1) && (!target.color.equals(color) || target==null)){
+        Square target = board[newRow][newCol];
+        if((absCol<=1 && absRow<=1) && (target.isEmpty() || !target.getPiece().color.equals(color))){
             return true;
         }
         return false;
