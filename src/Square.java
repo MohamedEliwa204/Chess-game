@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 public class Square extends JLabel implements ActionListener {
     // what is contain, position, is_empty, set_piece, get_piece, remove_piece.
 
-    String piece = null; // -> will modify to be class after making pieces class.
+    Piece piece; // -> will modify to be class after making pieces class.
     JButton button;
     char row;
     char col;
@@ -43,11 +43,11 @@ public class Square extends JLabel implements ActionListener {
         return piece == null;
     }
 
-    public String getPiece() {
+    public Piece getPiece() {
         return piece;
     }
 
-    public void setPiece(String spiece) {
+    public void setPiece(Piece spiece) {
         piece = spiece;
     }
 
