@@ -1,3 +1,50 @@
-public class Bishop {
+import javax.swing.*;
+import java.awt.*;
 
+public class Bishop extends Piece{
+    public Bishop(String color, int row, int col, ImageIcon icon){
+        super("Bishop", color, row, col, icon);
+    }
+
+    @Override
+    boolean isValidMove(int newRow, int newCol, Square[][] board) {
+        int absCol = Math.abs(newCol-col);
+        int absRow = Math.abs(newRow-row);
+
+
+        if(newRow < 1 || newRow > 8 || newCol < 1 || newCol > 8) {
+            return false;
+        }
+
+        if(absCol != absRow) {
+            return false;
+        }
+
+        int stepRow = (newRow > row) ? 1 : -1;
+        int stepCol = (newCol > col) ? 1 : -1;
+
+        int c = col, r = row;
+        while (c != newCol || r != newRow) {
+            c += stepCol;
+            r += stepRow;
+
+
+            if (!board[r][c].isEmpty()) {
+                return false;
+            }
+        }
+
+
+        if (!board[newRow][newCol].isEmpty() && board[newRow][newCol].piece.color.equals(color)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    @Override
+    void move(int newRow, int newCol) {
+        super.move(newRow, newCol);
+    }
 }

@@ -11,10 +11,11 @@ public class Square extends JLabel implements ActionListener {
 
     Piece piece; // -> will modify to be class after making pieces class.
     JButton button;
-    char row;
-    char col;
+    int row;
+    int col;
+    Color c;
 
-    public Square(Color c, char row, char col) {
+    public Square(Color c, int row, int col) {
 
         button = new JButton();
         this.setLayout(new BorderLayout());
@@ -28,14 +29,14 @@ public class Square extends JLabel implements ActionListener {
         this.add(button, BorderLayout.CENTER);
         this.setBackground(c);
         this.setOpaque(true);
-
+        this.c = c;
     }
 
-    public char getRow() {
+    public int getRow() {
         return row;
     }
 
-    public char getCol() {
+    public int getCol() {
         return col;
     }
 

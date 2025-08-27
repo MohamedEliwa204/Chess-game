@@ -6,28 +6,28 @@ public class Rook extends Piece{
     }
 
     @Override
-    boolean isValidMove(int newRow, int newCol, Piece[][] board) {
+    boolean isValidMove(int newRow, int newCol, Square[][] board) {
         if(newRow>=0 && newRow<=7 && newCol>=0 && newCol<=7){
-            if (newCol == col) {
+            if (newCol == col) { // the rook will move vertically
                 int step = (newRow > row) ? 1 : -1;
                 for (int r = row + step; r != newRow; r += step) {
-                    if (board[r][col] != null) {
+                    if (!board[r][col].isEmpty()) {
                         return false;
                     }
                 }
-                if(board[newRow][newCol].equals(color)){
+                if(!board[newRow][newCol].isEmpty() &&   board[newRow][newCol].getPiece().color.equals(color)){
                     return false;
                 }
                 return true;
             }
-            if(newRow==row){
+            if(newRow==row){ // the rook will move horizontally
                 int step = (newCol> col) ? 1 : -1 ;
                 for(int c= col + step ; c != newCol ; c+=step){
-                    if(board[row][c]!=null){
+                    if(!board[row][c].isEmpty()){
                         return false;
                     }
                 }
-                if(board[newRow][newCol].equals(color)){
+                if(!board[newRow][newCol].isEmpty() && board[newRow][newCol].getPiece().color.equals(color)){
                     return false;
                 }
                 return true;

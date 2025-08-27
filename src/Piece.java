@@ -15,7 +15,7 @@ abstract class Piece {
         this.icon = icon;
     }
 
-    abstract boolean isValidMove(int newRow, int newCol, Piece[][] board);
+    abstract boolean isValidMove(int newRow, int newCol, Square[][] board);
 
     void move(int newRow, int newCol) {
         this.row = newRow;
