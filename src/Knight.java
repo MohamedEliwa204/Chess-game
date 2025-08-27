@@ -6,10 +6,9 @@ public class Knight extends Piece {
     }
 
     @Override
-    boolean isValidMove(int newRow, int newCol, Piece[][] board) {// i am using a board of pieces could be changed to be of squares
-        // to know whether this part of the board contains a piece of the same or different color or if it is empty
-        Piece target = board[newRow][newCol];
-        if(target==null || !target.color.equals(color)){
+    boolean isValidMove(int newRow, int newCol, Square[][] board) {
+        Square target = board[newRow][newCol];
+        if(target.isEmpty() || !target.getPiece().color.equals(color)){
             if((newRow==row+2 || newRow==row-2) && (newCol== col+1 || newCol==col-1)){
                 return true;
             }
@@ -25,4 +24,5 @@ public class Knight extends Piece {
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
     }
+
 }
