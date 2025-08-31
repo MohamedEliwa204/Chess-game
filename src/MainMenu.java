@@ -12,12 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class MainMenu extends JPanel implements ActionListener {
+    private final App controller;
     JButton playervsplayer;
     JButton playervsengine;
     JButton exit;
     JLabel welcome;
 
-    public MainMenu() {
+    public MainMenu(App controller) {
+        this.controller = controller;
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 5, 10, 5);
@@ -25,7 +27,7 @@ public class MainMenu extends JPanel implements ActionListener {
         welcome = new JLabel("Hello in our chess game!");
         welcome.setPreferredSize(new Dimension(250, 150));
         welcome.setBackground(new Color(88, 177, 166));
-        welcome.setFont(new Font("MedievalSharp", Font.ITALIC, 20));
+        welcome.setFont(new Font("MedievalSharp", Font.ITALIC, 30));
         playervsplayer = new JButton("Player VS Player");
         playervsplayer.setBackground(new Color(1, 86, 112));
         playervsplayer.setForeground(new Color(232, 224, 200));
@@ -55,7 +57,7 @@ public class MainMenu extends JPanel implements ActionListener {
         this.add(playervsengine, gbc);
 
         gbc.gridy = 3;
-        this.add(exit);
+        this.add(exit, gbc);
         this.setBackground(new Color(88, 177, 166));
     }
 

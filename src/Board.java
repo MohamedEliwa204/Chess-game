@@ -19,8 +19,8 @@ public class Board extends JPanel {
     // move piece
     // display board
     private static final int IMAGE_SIZE = 60;
-    private static final int CAPTURED_IMAGE_SIZE = 10;
-    JFrame frame;
+    private static final int CAPTURED_IMAGE_SIZE = 25;
+
     public Square[][] board = new Square[8][8];
     JPanel killed1 = new JPanel(new FlowLayout());
     JPanel killed2 = new JPanel(new FlowLayout());
@@ -44,7 +44,8 @@ public class Board extends JPanel {
 
     public Board() {
         // the indexing of the rows and columns of the grid.
-        this.setLayout(new GridLayout(8, 8));
+        JPanel tempPanel = new JPanel(new GridLayout(8, 8));
+        this.setLayout(new BorderLayout());
         JPanel leftPanel = new JPanel(new GridLayout(8, 1));
         JPanel bottomPanel = new JPanel(new GridLayout(1, 8));
         for (int i = 1; i <= 8; i++) {
@@ -163,7 +164,7 @@ public class Board extends JPanel {
                     board[i][j].setPiece(new King("Black", i + 1, j + 1, scaleImage(rowKingB, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
-                this.add(board[i][j]);
+                tempPanel.add(board[i][j]);
                 temp += 1;
             }
 
@@ -173,21 +174,24 @@ public class Board extends JPanel {
         grid.setLayout(new BorderLayout(0, 0));
         grid.add(bottomPanel, BorderLayout.SOUTH);
         grid.add(leftPanel, BorderLayout.WEST);
-        grid.add(this, BorderLayout.CENTER);
-        frame = new JFrame();
-        frame.setLayout(new BorderLayout(0, 0));
+        grid.add(tempPanel, BorderLayout.CENTER);
+
         player1.setPreferredSize(new Dimension(150, 0));
         player2.setPreferredSize(new Dimension(150, 0));
-        ImageIcon icon = new ImageIcon("C:\\Users\\Mohamed\\Downloads\\king-1716907_640.jpg");
-        frame.setIconImage(icon.getImage());
-        frame.setTitle("Hello in our chess game!");
-        frame.setResizable(true);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.add(player2, BorderLayout.EAST);
-        frame.add(player1, BorderLayout.WEST);
-        frame.add(grid, BorderLayout.CENTER);
+        // ImageIcon icon = new
+        // ImageIcon("C:\\Users\\Mohamed\\Downloads\\king-1716907_640.jpg");
+        // frame.setIconImage(icon.getImage());
+        // frame.setTitle("Hello in our chess game!");
+        // frame.setResizable(true);
+        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setVisible(true);
+        // frame.add(player2, BorderLayout.EAST);
+        // frame.add(player1, BorderLayout.WEST);
+        // frame.add(grid, BorderLayout.CENTER);
+        this.add(player2, BorderLayout.EAST);
+        this.add(player1, BorderLayout.WEST);
+        this.add(grid, BorderLayout.CENTER);
     }
 
     private ImageIcon scaleImage(ImageIcon icon, int w, int h) {
@@ -196,7 +200,7 @@ public class Board extends JPanel {
         return new ImageIcon(resized);
     }
 
-    public void setkilled(Piece killed) {
+    public void setKilledPiece(Piece killed) {
         ImageIcon icon = killed.getIcon();
         ImageIcon smallIcon = scaleImage(icon, CAPTURED_IMAGE_SIZE, CAPTURED_IMAGE_SIZE);
         JLabel temp = new JLabel();
@@ -215,9 +219,23 @@ public class Board extends JPanel {
         }
     }
 
-    public void setGame(String name1, String name2, int min) {
+    // public void restart() {
+    // new Board();
+    // setupGame(player_name1.getText(), player_name2.getText(), min);
+    // }
+
+    public void setupGame(String name1, String name2, int min) {
+
         this.player_name1.setText(name1);
         this.player_name2.setText(name2);
         this.player_time1.setText(String.format("%02d:%02d", min, 0));
+        this.player_time2.setText(String.format("%02d:%02d", min, 0));
+
+        this.killed1.removeAll();
+        this.killed2.removeAll();
+        this.killed1.revalidate();
+        this.killed1.repaint();
+        this.killed2.revalidate();
+        this.killed2.repaint();
     }
 }
