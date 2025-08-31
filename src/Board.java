@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -16,11 +18,12 @@ public class Board extends JPanel {
     // initialize board
     // move piece
     // display board
-    private static final int imageSize = 60;
+    private static final int IMAGE_SIZE = 60;
+    private static final int CAPTURED_IMAGE_SIZE = 10;
     JFrame frame;
     public Square[][] board = new Square[8][8];
-    JLabel killed1 = new JLabel();
-    JLabel killed2 = new JLabel();
+    JPanel killed1 = new JPanel(new FlowLayout());
+    JPanel killed2 = new JPanel(new FlowLayout());
     JLabel player_name1 = new JLabel();
     JLabel player_name2 = new JLabel();
     JLabel player_time1 = new JLabel();
@@ -56,7 +59,30 @@ public class Board extends JPanel {
         bottomPanel.setBackground(new Color(146, 160, 127));
         JPanel player1 = new JPanel(new GridBagLayout());
         JPanel player2 = new JPanel(new GridBagLayout());
+        player_name1.setOpaque(true);
+        player_name2.setOpaque(true);
+        player_name1.setBackground(new Color(26, 65, 70));
+        player_name1.setForeground(new Color(232, 224, 200));
+        player_name2.setForeground(new Color(232, 224, 200));
+        player_name2.setBackground(new Color(26, 65, 70));
+        player_name1.setFont(new Font("Georgia", Font.BOLD, 18));
+        player_name2.setFont(new Font("Georgia", Font.BOLD, 18));
+        player_time1.setOpaque(true);
+        player_time2.setOpaque(true);
+        player_time1.setBackground(new Color(39, 114, 114));
+        player_time2.setBackground(new Color(39, 114, 114));
+        player_time1.setForeground(new Color(232, 224, 200));
+        player_time2.setForeground(new Color(232, 224, 200));
+        player_time1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        player_time2.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        killed1.setOpaque(true);
+        killed2.setOpaque(true);
+        killed1.setBackground(new Color(232, 224, 200));
+        killed2.setBackground(new Color(232, 224, 200));
+
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weighty = 0.2;
@@ -83,53 +109,58 @@ public class Board extends JPanel {
                 }
                 if (i == 1) {
                     board[i][j].setPiece(new Pawn("White", i + 1, j + 1,
-                            scaleImage(rowPawnW, imageSize, imageSize),
+                            scaleImage(rowPawnW, IMAGE_SIZE, IMAGE_SIZE),
                             getVerifyInputWhenFocusTarget()));
                 }
                 if (i == 6) {
                     board[i][j].setPiece(new Pawn("Black", i + 1, j + 1,
-                            scaleImage(rowPawnB, imageSize, imageSize),
+                            scaleImage(rowPawnB, IMAGE_SIZE, IMAGE_SIZE),
                             getVerifyInputWhenFocusTarget()));
                 }
                 if (i == 0 && temp == 'd') {
                     board[i][j]
-                            .setPiece(new Queen("White", i + 1, j + 1, scaleImage(rowQueenW, imageSize, imageSize)));
+                            .setPiece(new Queen("White", i + 1, j + 1, scaleImage(rowQueenW, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 7 && temp == 'd') {
-                    board[i][j].setPiece(new Queen("Black", i + 1, j + 1, scaleImage(rowQueenB, imageSize, imageSize)));
+                    board[i][j]
+                            .setPiece(new Queen("Black", i + 1, j + 1, scaleImage(rowQueenB, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 0 && (temp == 'a' || temp == 'h')) {
-                    board[i][j].setPiece(new Rook("White", i + 1, j + 1, scaleImage(rowRookW, imageSize, imageSize)));
+                    board[i][j].setPiece(new Rook("White", i + 1, j + 1, scaleImage(rowRookW, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 7 && (temp == 'a' || temp == 'h')) {
-                    board[i][j].setPiece(new Rook("Black", i + 1, j + 1, scaleImage(rowRookB, imageSize, imageSize)));
+                    board[i][j].setPiece(new Rook("Black", i + 1, j + 1, scaleImage(rowRookB, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 0 && (temp == 'b' || temp == 'g')) {
                     board[i][j]
-                            .setPiece(new Knight("White", i + 1, j + 1, scaleImage(rowKnightW, imageSize, imageSize)));
+                            .setPiece(
+                                    new Knight("White", i + 1, j + 1, scaleImage(rowKnightW, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 7 && (temp == 'b' || temp == 'g')) {
                     board[i][j]
-                            .setPiece(new Knight("Black", i + 1, j + 1, scaleImage(rowKnightB, imageSize, imageSize)));
+                            .setPiece(
+                                    new Knight("Black", i + 1, j + 1, scaleImage(rowKnightB, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 0 && (temp == 'c' || temp == 'f')) {
                     board[i][j]
-                            .setPiece(new Bishop("White", i + 1, j + 1, scaleImage(rowBishopW, imageSize, imageSize)));
+                            .setPiece(
+                                    new Bishop("White", i + 1, j + 1, scaleImage(rowBishopW, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 7 && (temp == 'c' || temp == 'f')) {
                     board[i][j]
-                            .setPiece(new Bishop("Black", i + 1, j + 1, scaleImage(rowBishopB, imageSize, imageSize)));
+                            .setPiece(
+                                    new Bishop("Black", i + 1, j + 1, scaleImage(rowBishopB, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 0 && (temp == 'e')) {
-                    board[i][j].setPiece(new King("White", i + 1, j + 1, scaleImage(rowKingW, imageSize, imageSize),
+                    board[i][j].setPiece(new King("White", i + 1, j + 1, scaleImage(rowKingW, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
                 if (i == 7 && (temp == 'e')) {
-                    board[i][j].setPiece(new King("Black", i + 1, j + 1, scaleImage(rowKingB, imageSize, imageSize),
+                    board[i][j].setPiece(new King("Black", i + 1, j + 1, scaleImage(rowKingB, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
                 this.add(board[i][j]);
@@ -137,6 +168,7 @@ public class Board extends JPanel {
             }
 
         }
+
         JPanel grid = new JPanel();
         grid.setLayout(new BorderLayout(0, 0));
         grid.add(bottomPanel, BorderLayout.SOUTH);
@@ -150,7 +182,7 @@ public class Board extends JPanel {
         frame.setIconImage(icon.getImage());
         frame.setTitle("Hello in our chess game!");
         frame.setResizable(true);
-        frame.setSize(650, 650);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.add(player2, BorderLayout.EAST);
@@ -164,4 +196,28 @@ public class Board extends JPanel {
         return new ImageIcon(resized);
     }
 
+    public void setkilled(Piece killed) {
+        ImageIcon icon = killed.getIcon();
+        ImageIcon smallIcon = scaleImage(icon, CAPTURED_IMAGE_SIZE, CAPTURED_IMAGE_SIZE);
+        JLabel temp = new JLabel();
+        temp.setIcon(smallIcon);
+
+        if (killed.getColor().equals("White")) {
+            killed1.add(temp);
+            // refresh panel to update.
+            killed1.revalidate();
+            killed1.repaint();
+        } else {
+            killed2.add(temp);
+            // refresh panel to update.
+            killed2.revalidate();
+            killed2.repaint();
+        }
+    }
+
+    public void setGame(String name1, String name2, int min) {
+        this.player_name1.setText(name1);
+        this.player_name2.setText(name2);
+        this.player_time1.setText(String.format("%02d:%02d", min, 0));
+    }
 }

@@ -15,6 +15,14 @@ abstract class Piece {
         this.icon = icon;
     }
 
+    public ImageIcon getIcon() {
+        return this.icon;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
     abstract boolean isValidMove(int newRow, int newCol, Square[][] board);
 
     void move(int newRow, int newCol) {
