@@ -41,7 +41,7 @@ public class App {
 
     public void startGame(String n1, String n2, int t) {
         board.setupGame(n1, n2, t);
-        cardLayout.show(cardPanel, "Play Board");
+        cardLayout.show(cardPanel, "Play board");
     }
 
     public static void main(String[] args) throws Exception {
