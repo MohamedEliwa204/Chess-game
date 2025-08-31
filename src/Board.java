@@ -1,5 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -16,6 +19,12 @@ public class Board extends JPanel {
     private static final int imageSize = 60;
     JFrame frame;
     public Square[][] board = new Square[8][8];
+    JLabel killed1 = new JLabel();
+    JLabel killed2 = new JLabel();
+    JLabel player_name1 = new JLabel();
+    JLabel player_name2 = new JLabel();
+    JLabel player_time1 = new JLabel();
+    JLabel player_time2 = new JLabel();
     // storing the row images.
     ImageIcon rowPawnB = new ImageIcon(getClass().getResource("/pieces/pawn_B.png"));
     ImageIcon rowPawnW = new ImageIcon(getClass().getResource("/pieces/pawn_W.png"));
@@ -45,7 +54,23 @@ public class Board extends JPanel {
         }
         leftPanel.setBackground(new Color(146, 160, 127));
         bottomPanel.setBackground(new Color(146, 160, 127));
+        JPanel player1 = new JPanel(new GridBagLayout());
+        JPanel player2 = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weighty = 0.2;
+        player1.add(player_name1, gbc);
+        player2.add(player_name2, gbc);
+        gbc.gridy = 1;
+        gbc.weighty = 0.2;
+        player1.add(player_time1, gbc);
+        player2.add(player_time2, gbc);
+        gbc.gridy = 2;
+        gbc.weighty = 0.6;
 
+        player1.add(killed1, gbc);
+        player2.add(killed2, gbc);
         // putting the squares in the board and put pieces in the square.
         for (int i = 0; i < 8; i++) {
             char temp = 'a';
@@ -112,10 +137,15 @@ public class Board extends JPanel {
             }
 
         }
-
+        JPanel grid = new JPanel();
+        grid.setLayout(new BorderLayout(0, 0));
+        grid.add(bottomPanel, BorderLayout.SOUTH);
+        grid.add(leftPanel, BorderLayout.WEST);
+        grid.add(this, BorderLayout.CENTER);
         frame = new JFrame();
         frame.setLayout(new BorderLayout(0, 0));
-
+        player1.setPreferredSize(new Dimension(150, 0));
+        player2.setPreferredSize(new Dimension(150, 0));
         ImageIcon icon = new ImageIcon("C:\\Users\\Mohamed\\Downloads\\king-1716907_640.jpg");
         frame.setIconImage(icon.getImage());
         frame.setTitle("Hello in our chess game!");
@@ -123,10 +153,9 @@ public class Board extends JPanel {
         frame.setSize(650, 650);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.add(bottomPanel, BorderLayout.SOUTH);
-        frame.add(leftPanel, BorderLayout.WEST);
-        frame.add(this, BorderLayout.CENTER);
-
+        frame.add(player2, BorderLayout.EAST);
+        frame.add(player1, BorderLayout.WEST);
+        frame.add(grid, BorderLayout.CENTER);
     }
 
     private ImageIcon scaleImage(ImageIcon icon, int w, int h) {
