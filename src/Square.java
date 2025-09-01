@@ -34,18 +34,19 @@ public class Square extends JLabel implements ActionListener {
         // here this code meaning that when you the button pulled make the drag action
         button.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent e) {
-                JButton b = (JButton)e.getSource();
+                JButton b = (JButton) e.getSource();
                 TransferHandler handler = b.getTransferHandler();
                 handler.exportAsDrag(b, e, TransferHandler.MOVE);
             }
         });
-        // here the swing will allow anything that is pulled (piece) to be put in the button
+        // here the swing will allow anything that is pulled (piece) to be put in the
+        // button
         button.setDropTarget(new DropTarget());
 
         button.setDropTarget(new DropTarget(button, DnDConstants.ACTION_MOVE, new java.awt.dnd.DropTargetAdapter() {
             @Override
             public void drop(java.awt.dnd.DropTargetDropEvent dtde) {
-                lastDropTarget = Square.this; // هذا المربع هو اللي اتعمل عليه drop
+                lastDropTarget = Square.this;
                 dtde.acceptDrop(DnDConstants.ACTION_MOVE);
                 dtde.dropComplete(true);
             }
@@ -87,8 +88,6 @@ public class Square extends JLabel implements ActionListener {
         this.button.setIcon(null);
     }
 
-
-
     public void setParentBoard(Board board) {
         this.parentBoard = board;
     }
@@ -96,8 +95,6 @@ public class Square extends JLabel implements ActionListener {
     public Board getParentBoard() {
         return this.parentBoard;
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 public class SettingMenu extends JPanel implements ActionListener {
     private final App controller;
@@ -31,7 +32,7 @@ public class SettingMenu extends JPanel implements ActionListener {
         this.controller = controller;
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 5, 10, 5); // Padding between components
+        gbc.insets = new Insets(20, 5, 20, 5); // Padding between components
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         start = new JButton("Start Game!");
@@ -43,20 +44,30 @@ public class SettingMenu extends JPanel implements ActionListener {
         label1.setBackground(new Color(60, 69, 80));
         label1.setForeground(Color.WHITE);
         label1.setOpaque(true);
+        label1.setPreferredSize(new Dimension(250, 50));
+        label1.setFont(new Font("Serif", Font.BOLD, 24));
+        label1.setHorizontalAlignment(SwingConstants.TRAILING);
         label2 = new JLabel("Player 2 name: ");
         label2.setBackground(new Color(60, 69, 80));
         label2.setForeground(Color.WHITE);
         label2.setOpaque(true);
+        label2.setPreferredSize(new Dimension(250, 50));
+        label2.setHorizontalAlignment(SwingConstants.TRAILING);
+        label2.setFont(new Font("Serif", Font.BOLD, 24));
         text1 = new JTextField();
-        text1.setPreferredSize(new Dimension(250, 70));
+        text1.setPreferredSize(new Dimension(250, 50));
+        text1.setFont(new Font("Serif", Font.ITALIC, 24));
         text2 = new JTextField();
-        text2.setPreferredSize(new Dimension(250, 70));
+        text2.setPreferredSize(new Dimension(250, 50));
         text1.setBackground(new Color(176, 184, 193));
         text2.setBackground(new Color(176, 184, 193));
+        text2.setFont(new Font("Serif", Font.ITALIC, 24));
         label3 = new JLabel("set the time(in minutes): ");
         label3.setBackground(new Color(60, 69, 80));
         label3.setForeground(Color.WHITE);
         label3.setOpaque(true);
+        label3.setFont(new Font("Serif", Font.BOLD, 24));
+        label3.setHorizontalAlignment(SwingConstants.TRAILING);
         spinnerTime = new JSpinner(new SpinnerNumberModel(10, 1, 240, 1));
 
         JComponent editor = spinnerTime.getEditor();

@@ -25,25 +25,27 @@ public class MainMenu extends JPanel implements ActionListener {
         gbc.insets = new Insets(10, 5, 10, 5);
         gbc.fill = GridBagConstraints.CENTER;
         welcome = new JLabel("Hello in our chess game!");
-        welcome.setPreferredSize(new Dimension(250, 150));
+        welcome.setPreferredSize(new Dimension(450, 150));
         welcome.setBackground(new Color(88, 177, 166));
-        welcome.setFont(new Font("MedievalSharp", Font.ITALIC, 30));
+        welcome.setFont(new Font("MedievalSharp", Font.ITALIC, 40));
         playervsplayer = new JButton("Player VS Player");
         playervsplayer.setBackground(new Color(1, 86, 112));
         playervsplayer.setForeground(new Color(232, 224, 200));
-        playervsplayer.setPreferredSize(new Dimension(200, 50));
+        playervsplayer.setPreferredSize(new Dimension(300, 70));
         playervsplayer.setFocusPainted(false);
         playervsplayer.addActionListener(this);
+        playervsplayer.setFont(new Font("SansSerif", Font.BOLD, 25));
         playervsengine = new JButton("Player VS Engine");
         playervsengine.setBackground(new Color(1, 86, 112));
         playervsengine.setForeground(new Color(232, 224, 200));
-        playervsengine.setPreferredSize(new Dimension(200, 50));
+        playervsengine.setPreferredSize(new Dimension(300, 70));
         playervsengine.setFocusPainted(false);
         playervsengine.addActionListener(this);
+        playervsengine.setFont(new Font("SansSerif", Font.BOLD, 25));
         exit = new JButton("EXIT");
         exit.setBackground(new Color(64, 0, 0));
         exit.setForeground(new Color(250, 0, 0));
-        exit.setPreferredSize(new Dimension(100, 50));
+        exit.setPreferredSize(new Dimension(200, 70));
         exit.setFocusPainted(false);
         exit.addActionListener(this);
         gbc.gridx = 0;
@@ -66,8 +68,10 @@ public class MainMenu extends JPanel implements ActionListener {
         if (e.getSource() == exit) {
             System.exit(0);
         } else if (e.getSource() == playervsplayer) {
+            controller.showSetting();
 
         } else if (e.getSource() == playervsengine) {
+            controller.setLevel();
 
         }
 

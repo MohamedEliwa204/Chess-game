@@ -230,7 +230,14 @@ public class Board extends JPanel {
         this.player_name2.setText(name2);
         this.player_time1.setText(String.format("%02d:%02d", min, 0));
         this.player_time2.setText(String.format("%02d:%02d", min, 0));
-
+        this.player_name1.setHorizontalAlignment(SwingConstants.CENTER);
+        this.player_name2.setHorizontalAlignment(SwingConstants.CENTER);
+        this.player_time1.setHorizontalAlignment(SwingConstants.CENTER);
+        this.player_time2.setHorizontalAlignment(SwingConstants.CENTER);
+        this.player_name1.setFont(new Font("Serif", Font.ITALIC, 24));
+        this.player_name2.setFont(new Font("Serif", Font.ITALIC, 24));
+        this.player_time1.setFont(new Font("Monospaced", Font.BOLD, 40));
+        this.player_time2.setFont(new Font("Monospaced", Font.BOLD, 40));
         this.killed1.removeAll();
         this.killed2.removeAll();
         this.killed1.revalidate();

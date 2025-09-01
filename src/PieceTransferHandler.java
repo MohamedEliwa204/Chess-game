@@ -28,7 +28,8 @@ public class PieceTransferHandler extends TransferHandler {
             Square targetSquare = Square.lastDropTarget; // هتعمل دالة ترجع المربع اللي اتعمل عليه drop
             Piece piece = sourceSquare.getPiece();
             if (piece != null && targetSquare != null) {
-                boolean valid = piece.isValidMove(targetSquare.getRow(), targetSquare.getCol(), sourceSquare.getParentBoard().board);
+                boolean valid = piece.isValidMove(targetSquare.getRow(), targetSquare.getCol(),
+                        sourceSquare.getParentBoard().board);
                 if (valid) {
                     // لو فيه قطعة في المربع الجديد → تتحط في killed panel
                     if (!targetSquare.isEmpty()) {
