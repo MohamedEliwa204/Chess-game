@@ -1,9 +1,7 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -14,12 +12,16 @@ public class Square extends JLabel implements ActionListener {
     JButton button;
     int row;
     int col;
+    ImageIcon temp_icon;
     Color c;
     public static Square lastDropTarget = null;
+    public static Piece draggedPiece = null;
     Board parentBoard;
 
     public Square(Color c, int row, int col) {
-
+        ClickListener clickListener = new ClickListener();
+        DragListener dragListerner = new DragListener();
+        ReleaseListener releaseListener = new ReleaseListener();
         button = new JButton();
         this.setLayout(new BorderLayout());
         this.row = row;
@@ -29,32 +31,14 @@ public class Square extends JLabel implements ActionListener {
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
         button.addActionListener(this);
-        // here i am making the button to say that he will have what to be dragged
-        button.setTransferHandler(new PieceTransferHandler(this));
-        // here this code meaning that when you the button pulled make the drag action
-        button.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent e) {
-                JButton b = (JButton)e.getSource();
-                TransferHandler handler = b.getTransferHandler();
-                handler.exportAsDrag(b, e, TransferHandler.MOVE);
-            }
-        });
-        // here the swing will allow anything that is pulled (piece) to be put in the button
-        button.setDropTarget(new DropTarget());
-
-        button.setDropTarget(new DropTarget(button, DnDConstants.ACTION_MOVE, new java.awt.dnd.DropTargetAdapter() {
-            @Override
-            public void drop(java.awt.dnd.DropTargetDropEvent dtde) {
-                lastDropTarget = Square.this; // هذا المربع هو اللي اتعمل عليه drop
-                dtde.acceptDrop(DnDConstants.ACTION_MOVE);
-                dtde.dropComplete(true);
-            }
-        }, true, null));
 
         this.add(button, BorderLayout.CENTER);
         this.setBackground(c);
         this.setOpaque(true);
         this.c = c;
+        this.addMouseListener(clickListener);
+        this.addMouseMotionListener(dragListerner);
+        this.addMouseListener(releaseListener);
     }
 
     public int getRow() {
@@ -105,7 +89,56 @@ public class Square extends JLabel implements ActionListener {
             // will be implemented
             System.out.printf("hello in my square! (%c,%c)%n", row, col);
         }
-        // throw new UnsupportedOperationException("Unimplemented method
-        // 'actionPerformed'");
     }
+
+    private class ClickListener extends MouseAdapter {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            Square currentSquare = (Square) e.getSource();
+            if (!currentSquare.isEmpty()) {
+                lastDropTarget = currentSquare;
+
+                draggedPiece = currentSquare.getPiece();
+                temp_icon = draggedPiece.icon;
+                currentSquare.removePiece();
+            }
+        }
+    }
+
+    private class DragListener extends MouseMotionAdapter {
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            if (temp_icon != null) {
+                Graphics g = getParent().getGraphics();
+                Point p = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getParent());
+                g.drawImage(temp_icon.getImage(), p.x, p.y, null);
+            }
+        }
+    }
+
+    private class ReleaseListener extends MouseAdapter {
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if (lastDropTarget != null && draggedPiece != null) {
+                Square targetSquare = (Square) e.getSource();
+
+                if (draggedPiece.isValidMove(targetSquare.getRow(), targetSquare.getCol(),
+                        targetSquare.getParentBoard().board)) {
+                    if (!targetSquare.isEmpty()) {
+                        targetSquare.getParentBoard().setKilledPiece(targetSquare.getPiece());
+                    }
+                    targetSquare.setPiece(draggedPiece);
+                } else {
+
+                    lastDropTarget.setPiece(draggedPiece);
+                }
+
+                // reset
+                draggedPiece = null;
+                temp_icon = null;
+                lastDropTarget = null;
+            }
+        }
+    }
+
 }
