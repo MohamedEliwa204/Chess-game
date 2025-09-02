@@ -194,6 +194,16 @@ public class Board extends JPanel {
         this.add(grid, BorderLayout.CENTER);
     }
 
+    public void clear_add_color() {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j < 8; j++) {
+                Color originalColor = ((i + j) % 2 == 0) ? new Color(216, 198, 160) : new Color(126, 110, 99);
+                board[i][j].setBackground(originalColor);
+                board[i][j].repaint();
+            }
+        }
+    }
+
     private ImageIcon scaleImage(ImageIcon icon, int w, int h) {
         Image img = icon.getImage();
         Image resized = img.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH);
