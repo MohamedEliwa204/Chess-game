@@ -5,9 +5,9 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class Square extends JLabel implements MouseMotionListener, MouseListener {
+public class Square extends JLabel implements MouseMotionListener, MouseListener, ActionListener {
     // what is contain, position, is_empty, set_piece, get_piece, remove_piece.
-    static int Dragged_row ;
+    static int Dragged_row;
     static int Dragged_col;
     static Piece Dragged_Piece;
     static Square Dragged_from_square;
@@ -18,6 +18,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     int row;
     int col;
     Color c;
+
     public Square(Color c, int row, int col) {
 
         button = new JButton();
@@ -30,6 +31,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
         button.setContentAreaFilled(false);
         button.addMouseListener(this);
         button.addMouseMotionListener(this);
+        button.addActionListener(this);
 
         this.add(button, BorderLayout.CENTER);
         this.setBackground(c);
@@ -67,18 +69,16 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
         this.button.setIcon(null);
     }
 
-
-
     @Override
     public void mousePressed(MouseEvent e) {
-        if(this.getPiece()!=null && this.getPiece().color.equals(Player_color)){
-            Dragged_Piece=this.getPiece();
-            Dragged_row=this.row;
-            Dragged_col=this.col;
-            Dragged_from_square=this;
-            for(int i=0 ; i<8 ; i++){
-                for(int j=0 ; j<8 ; j++){
-                    if(Dragged_Piece.isValidMove(i,j,parentBoard.board)){
+        if (this.getPiece() != null && this.getPiece().color.equals(Player_color)) {
+            Dragged_Piece = this.getPiece();
+            Dragged_row = this.row;
+            Dragged_col = this.col;
+            Dragged_from_square = this;
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (Dragged_Piece.isValidMove(i, j, parentBoard.board)) {
                         parentBoard.board[i][j].setBackground(Color.GREEN);
                         parentBoard.board[i][j].repaint();
                     }
@@ -88,7 +88,6 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
         }
     }
 
-
     @Override
     public void mouseDragged(MouseEvent e) {
 
@@ -96,13 +95,14 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(Dragged_Piece!=null){
+        if (Dragged_Piece != null) {
             Square targetSquare = null;
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     // here i wanna know where is the exactly the mouse pointer is
                     Point p = e.getLocationOnScreen();
-                    // converting this point to a square as if the square contains the pointer of the mouse so this is
+                    // converting this point to a square as if the square contains the pointer of
+                    // the mouse so this is
                     // the targeted square
                     SwingUtilities.convertPointFromScreen(p, parentBoard.board[i][j]);
 
@@ -111,15 +111,18 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                         break;
                     }
                 }
-                // if i searched and didn't find the pointer of the square on any square so there is no target or the
+                // if i searched and didn't find the pointer of the square on any square so
+                // there is no target or the
                 // mouse pointer is out of the board
                 if (targetSquare != null) {
                     break;
                 }
             }
-            if(targetSquare != null && Dragged_Piece.isValidMove(targetSquare.row, targetSquare.col, parentBoard.board)){
+            if (targetSquare != null
+                    && Dragged_Piece.isValidMove(targetSquare.row, targetSquare.col, parentBoard.board)) {
                 if (targetSquare.isEmpty()) {
-                    // here if the square is empty then put the piece and reset the color of the board again
+                    // here if the square is empty then put the piece and reset the color of the
+                    // board again
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                 } else {
@@ -128,9 +131,9 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                 }
-            }
-            else {
-                // setting the piece back to it's older place that's because the move isn't valid
+            } else {
+                // setting the piece back to it's older place that's because the move isn't
+                // valid
                 parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
             }
 
@@ -156,5 +159,13 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        if (e.getSource() == button) {
+            System.out.printf("%d %d", row, col);
+        }
     }
 }

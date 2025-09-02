@@ -104,9 +104,9 @@ public class Board extends JPanel {
             for (int j = 0; j < 8; j++) {
 
                 if ((i + j) % 2 == 0) {
-                    board[i][j] = new Square(new Color(216, 198, 160), (char) ((i + 1) + '0'), temp);
+                    board[i][j] = new Square(new Color(216, 198, 160), i, j);
                 } else {
-                    board[i][j] = new Square(new Color(126, 110, 99), (char) ((i + 1) + '0'), temp);
+                    board[i][j] = new Square(new Color(126, 110, 99), i, j);
                 }
                 if (i == 1) {
                     board[i][j].setPiece(new Pawn("White", i + 1, j + 1,
@@ -180,17 +180,7 @@ public class Board extends JPanel {
 
         player1.setPreferredSize(new Dimension(150, 0));
         player2.setPreferredSize(new Dimension(150, 0));
-        // ImageIcon icon = new
-        // ImageIcon("C:\\Users\\Mohamed\\Downloads\\king-1716907_640.jpg");
-        // frame.setIconImage(icon.getImage());
-        // frame.setTitle("Hello in our chess game!");
-        // frame.setResizable(true);
-        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setVisible(true);
-        // frame.add(player2, BorderLayout.EAST);
-        // frame.add(player1, BorderLayout.WEST);
-        // frame.add(grid, BorderLayout.CENTER);
+
         this.add(player2, BorderLayout.EAST);
         this.add(player1, BorderLayout.WEST);
         this.add(grid, BorderLayout.CENTER);
