@@ -5,7 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class Square extends JLabel implements MouseMotionListener, MouseListener, ActionListener {
+public class Square extends JLabel implements MouseMotionListener, MouseListener {
     // what is contain, position, is_empty, set_piece, get_piece, remove_piece.
     static int Dragged_row;
     static int Dragged_col;
@@ -31,7 +31,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
         button.setContentAreaFilled(false);
         button.addMouseListener(this);
         button.addMouseMotionListener(this);
-        button.addActionListener(this);
+        // button.addActionListener(this);
 
         this.add(button, BorderLayout.CENTER);
         this.setBackground(c);
@@ -96,48 +96,52 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     @Override
     public void mouseReleased(MouseEvent e) {
         if (Dragged_Piece != null) {
-            Square targetSquare = null;
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    // here i wanna know where is the exactly the mouse pointer is
-                    Point p = e.getLocationOnScreen();
-                    // converting this point to a square as if the square contains the pointer of
-                    // the mouse so this is
-                    // the targeted square
-                    SwingUtilities.convertPointFromScreen(p, parentBoard.board[i][j]);
+            System.out.println("--- MOUSE RELEASED ---"); // Start of event
 
-                    if (parentBoard.board[i][j].contains(p)) {
-                        targetSquare = parentBoard.board[i][j];
-                        break;
-                    }
-                }
-                // if i searched and didn't find the pointer of the square on any square so
-                // there is no target or the
-                // mouse pointer is out of the board
-                if (targetSquare != null) {
-                    break;
-                }
+            // 1. Find the target square
+            Point mousePoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), parentBoard);
+            Component releasedOn = parentBoard.getComponentAt(mousePoint);
+
+            Square targetSquare = null;
+            if (releasedOn instanceof Square) {
+                targetSquare = (Square) releasedOn;
+            } else if (releasedOn != null && releasedOn.getParent() instanceof Square) {
+                targetSquare = (Square) releasedOn.getParent();
             }
-            if (targetSquare != null
-                    && Dragged_Piece.isValidMove(targetSquare.row, targetSquare.col, parentBoard.board)) {
-                if (targetSquare.isEmpty()) {
-                    // here if the square is empty then put the piece and reset the color of the
-                    // board again
+
+            // 2. DEBUG: Check if the target square was found
+            if (targetSquare != null) {
+                System.out.println("DEBUG: Mouse released over a square at [" + targetSquare.getRow() + ", "
+                        + targetSquare.getCol() + "]");
+
+                // 3. DEBUG: Check if the move is considered valid by your game logic
+                boolean isMoveValid = Dragged_Piece.isValidMove(targetSquare.row, targetSquare.col, parentBoard.board);
+                System.out.println("DEBUG: Checking move for " + Dragged_Piece.getClass().getSimpleName() + " to ["
+                        + targetSquare.row + ", " + targetSquare.col + "]. Result: " + isMoveValid);
+
+                if (isMoveValid) {
+                    System.out.println("SUCCESS: Move is valid. Placing piece.");
+                    if (!targetSquare.isEmpty()) {
+                        parentBoard.setKilledPiece(targetSquare.getPiece());
+                    }
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
+
                 } else {
-                    // here there is an enemy's piece then we will kill it
-                    parentBoard.setKilledPiece(targetSquare.getPiece());
-                    targetSquare.setPiece(Dragged_Piece);
+                    System.out.println("FAILURE: Move is NOT valid. Returning piece.");
+                    parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                 }
             } else {
-                // setting the piece back to it's older place that's because the move isn't
-                // valid
+                System.out.println("FAILURE: Mouse released, but targetSquare is NULL. Returning piece.");
                 parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
+                parentBoard.clear_add_color();
             }
 
+            // 4. Clean up the drag state
             Dragged_Piece = null;
+            Dragged_from_square = null;
+            System.out.println("--- END OF EVENT ---\n");
         }
     }
 
@@ -161,11 +165,11 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        if (e.getSource() == button) {
-            System.out.printf("%d %d", row, col);
-        }
-    }
+    // @Override
+    // public void actionPerformed(ActionEvent e) {
+    // // TODO Auto-generated method stub
+    // if (e.getSource() == button) {
+    // System.out.printf("%d %d", row, col);
+    // }
+    // }
 }

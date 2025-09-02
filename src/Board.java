@@ -109,59 +109,59 @@ public class Board extends JPanel {
                     board[i][j] = new Square(new Color(126, 110, 99), i, j);
                 }
                 if (i == 1) {
-                    board[i][j].setPiece(new Pawn("White", i + 1, j + 1,
+                    board[i][j].setPiece(new Pawn("White", i, j,
                             scaleImage(rowPawnW, IMAGE_SIZE, IMAGE_SIZE),
                             getVerifyInputWhenFocusTarget()));
                 }
                 if (i == 6) {
-                    board[i][j].setPiece(new Pawn("Black", i + 1, j + 1,
+                    board[i][j].setPiece(new Pawn("Black", i, j,
                             scaleImage(rowPawnB, IMAGE_SIZE, IMAGE_SIZE),
                             getVerifyInputWhenFocusTarget()));
                 }
                 if (i == 0 && temp == 'd') {
                     board[i][j]
-                            .setPiece(new Queen("White", i + 1, j + 1, scaleImage(rowQueenW, IMAGE_SIZE, IMAGE_SIZE)));
+                            .setPiece(new Queen("White", i, j, scaleImage(rowQueenW, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 7 && temp == 'd') {
                     board[i][j]
-                            .setPiece(new Queen("Black", i + 1, j + 1, scaleImage(rowQueenB, IMAGE_SIZE, IMAGE_SIZE)));
+                            .setPiece(new Queen("Black", i, j, scaleImage(rowQueenB, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 0 && (temp == 'a' || temp == 'h')) {
-                    board[i][j].setPiece(new Rook("White", i + 1, j + 1, scaleImage(rowRookW, IMAGE_SIZE, IMAGE_SIZE)));
+                    board[i][j].setPiece(new Rook("White", i, j, scaleImage(rowRookW, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 7 && (temp == 'a' || temp == 'h')) {
-                    board[i][j].setPiece(new Rook("Black", i + 1, j + 1, scaleImage(rowRookB, IMAGE_SIZE, IMAGE_SIZE)));
+                    board[i][j].setPiece(new Rook("Black", i, j, scaleImage(rowRookB, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 0 && (temp == 'b' || temp == 'g')) {
                     board[i][j]
                             .setPiece(
-                                    new Knight("White", i + 1, j + 1, scaleImage(rowKnightW, IMAGE_SIZE, IMAGE_SIZE)));
+                                    new Knight("White", i, j, scaleImage(rowKnightW, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 7 && (temp == 'b' || temp == 'g')) {
                     board[i][j]
                             .setPiece(
-                                    new Knight("Black", i + 1, j + 1, scaleImage(rowKnightB, IMAGE_SIZE, IMAGE_SIZE)));
+                                    new Knight("Black", i, j, scaleImage(rowKnightB, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 0 && (temp == 'c' || temp == 'f')) {
                     board[i][j]
                             .setPiece(
-                                    new Bishop("White", i + 1, j + 1, scaleImage(rowBishopW, IMAGE_SIZE, IMAGE_SIZE)));
+                                    new Bishop("White", i, j, scaleImage(rowBishopW, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 7 && (temp == 'c' || temp == 'f')) {
                     board[i][j]
                             .setPiece(
-                                    new Bishop("Black", i + 1, j + 1, scaleImage(rowBishopB, IMAGE_SIZE, IMAGE_SIZE)));
+                                    new Bishop("Black", i, j, scaleImage(rowBishopB, IMAGE_SIZE, IMAGE_SIZE)));
 
                 }
                 if (i == 0 && (temp == 'e')) {
-                    board[i][j].setPiece(new King("White", i + 1, j + 1, scaleImage(rowKingW, IMAGE_SIZE, IMAGE_SIZE),
+                    board[i][j].setPiece(new King("White", i, j, scaleImage(rowKingW, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
                 if (i == 7 && (temp == 'e')) {
-                    board[i][j].setPiece(new King("Black", i + 1, j + 1, scaleImage(rowKingB, IMAGE_SIZE, IMAGE_SIZE),
+                    board[i][j].setPiece(new King("Black", i, j, scaleImage(rowKingB, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
                 board[i][j].addMouseListener(board[i][j]);
