@@ -164,14 +164,14 @@ public class Board extends JPanel {
                     board[i][j].setPiece(new King("Black", i, j, scaleImage(rowKingB, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
-                board[i][j].addMouseListener(board[i][j]);
-                board[i][j].addMouseMotionListener(board[i][j]);
+                // board[i][j].addMouseListener(board[i][j]);
+                // board[i][j].addMouseMotionListener(board[i][j]);
                 tempPanel.add(board[i][j]);
                 temp += 1;
             }
 
         }
-        Square.parentBoard = this;
+
         JPanel grid = new JPanel();
         grid.setLayout(new BorderLayout(0, 0));
         grid.add(bottomPanel, BorderLayout.SOUTH);
@@ -184,6 +184,7 @@ public class Board extends JPanel {
         this.add(player2, BorderLayout.EAST);
         this.add(player1, BorderLayout.WEST);
         this.add(grid, BorderLayout.CENTER);
+        Square.parentBoard = this;
     }
 
     public void clear_add_color() {
