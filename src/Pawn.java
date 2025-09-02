@@ -9,8 +9,10 @@ public class Pawn extends Piece {
     }
 
     @Override
-    boolean isValidMove(int newRow, int newCol, Square[][] board) { // i am using a board of pieces could be changed to be of squares
-        // to know whether this part of the board contains a piece of the same or different color or if it is empty
+    boolean isValidMove(int newRow, int newCol, Square[][] board) {
+        if(newRow<0 || newRow>7 || newCol>7 || newCol<0){
+            return false;
+        }
         int absCol = Math.abs(newCol - col);
         int dir = color.equals("Black") ? -1 : 1;
 
@@ -42,4 +44,5 @@ public class Pawn extends Piece {
         super.move(newRow, newCol);
         start = false;
     }
+
 }
