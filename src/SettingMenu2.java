@@ -17,19 +17,19 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-public class SettingMenu extends JPanel implements ActionListener {
+public class SettingMenu2 extends JPanel implements ActionListener {
     private final App controller;
     JButton start;
 
     JTextField text1;
-    JTextField text2;
+
     JSpinner spinnerTime;
     JLabel label1;
-    JLabel label2;
+
     JLabel label3;
     JButton back;
 
-    public SettingMenu(App controller) {
+    public SettingMenu2(App controller) {
         this.controller = controller;
         this.setLayout(new GridBagLayout());
         back = new JButton("Back");
@@ -60,21 +60,13 @@ public class SettingMenu extends JPanel implements ActionListener {
         label1.setPreferredSize(new Dimension(250, 50));
         label1.setFont(new Font("Serif", Font.BOLD, 24));
         label1.setHorizontalAlignment(SwingConstants.TRAILING);
-        label2 = new JLabel("Player 2 name: ");
-        label2.setBackground(new Color(60, 69, 80));
-        label2.setForeground(Color.WHITE);
-        label2.setOpaque(true);
-        label2.setPreferredSize(new Dimension(250, 50));
-        label2.setHorizontalAlignment(SwingConstants.TRAILING);
-        label2.setFont(new Font("Serif", Font.BOLD, 24));
+
         text1 = new JTextField();
         text1.setPreferredSize(new Dimension(250, 50));
         text1.setFont(new Font("Serif", Font.ITALIC, 24));
-        text2 = new JTextField();
-        text2.setPreferredSize(new Dimension(250, 50));
+
         text1.setBackground(new Color(176, 184, 193));
-        text2.setBackground(new Color(176, 184, 193));
-        text2.setFont(new Font("Serif", Font.ITALIC, 24));
+
         label3 = new JLabel("set the time(in minutes): ");
         label3.setBackground(new Color(60, 69, 80));
         label3.setForeground(Color.WHITE);
@@ -103,11 +95,11 @@ public class SettingMenu extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_END;
-        this.add(label2, gbc);
+
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_START;
-        this.add(text2, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -117,10 +109,10 @@ public class SettingMenu extends JPanel implements ActionListener {
         gbc.anchor = GridBagConstraints.LINE_START;
         this.add(spinnerTime, gbc);
         gbc.gridx = 0;
+
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-
         this.add(start, gbc);
         this.setBackground(new Color(0, 126, 149));
 
@@ -130,7 +122,7 @@ public class SettingMenu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == start) {
             String n1 = text1.getText();
-            String n2 = text2.getText();
+            String n2 = "Engine";
             int t = (int) spinnerTime.getValue();
             controller.startGame(n1, n2, t);
 

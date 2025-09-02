@@ -71,7 +71,7 @@ public class MainMenu extends JPanel implements ActionListener {
             controller.showSetting();
 
         } else if (e.getSource() == playervsengine) {
-            controller.setLevel();
+            controller.showSetting2();
 
         }
 

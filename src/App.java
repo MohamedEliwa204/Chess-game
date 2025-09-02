@@ -2,16 +2,22 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 public class App implements ActionListener {
     private final CardLayout cardLayout;
@@ -19,12 +25,16 @@ public class App implements ActionListener {
     JPanel cardPanel;
     MainMenu mainMenu;
     SettingMenu settingMenu;
+    SettingMenu2 settingMenu2;
     Board board;
     JFrame level;
     JRadioButton easy;
     JRadioButton medium;
     JRadioButton hard;
     JRadioButton legend;
+    JFrame time;
+    JSpinner spinnerTime1;
+
     // JButton ok;
 
     public App() {
@@ -40,12 +50,14 @@ public class App implements ActionListener {
 
         mainMenu = new MainMenu(this);
         settingMenu = new SettingMenu(this);
+        settingMenu2 = new SettingMenu2(this);
         board = new Board();
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.add(mainMenu, "Main menu");
         cardPanel.add(settingMenu, "Setting Menu");
+        cardPanel.add(settingMenu2, "Setting Menu2");
         cardPanel.add(board, "Play board");
 
         mainFrame.add(cardPanel);
@@ -61,6 +73,18 @@ public class App implements ActionListener {
 
         cardLayout.show(cardPanel, "Setting Menu");
     }
+
+    public void showSetting2() {
+        cardLayout.show(cardPanel, "Setting Menu2");
+    }
+
+    public void backToMain() {
+        cardLayout.show(cardPanel, "Main menu");
+    }
+
+    /**
+     * 
+     */
 
     public void setLevel() {
         level = new JFrame();
@@ -102,16 +126,6 @@ public class App implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == easy) {
-            level.dispose();
-
-        } else if (e.getSource() == medium) {
-            level.dispose();
-        } else if (e.getSource() == hard) {
-            level.dispose();
-        } else if (e.getSource() == legend) {
-            level.dispose();
-        }
 
     }
 }
