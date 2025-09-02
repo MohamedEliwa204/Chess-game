@@ -7,7 +7,7 @@ public class Queen extends Piece {
 
     @Override
     boolean isValidMove(int newRow, int newCol, Square[][] board) {
-        if (newRow < 1 || newRow > 8 || newCol < 1 || newCol > 8) {
+        if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
             return false;
         }
 
