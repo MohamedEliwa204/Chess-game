@@ -164,12 +164,14 @@ public class Board extends JPanel {
                     board[i][j].setPiece(new King("Black", i + 1, j + 1, scaleImage(rowKingB, IMAGE_SIZE, IMAGE_SIZE),
                             getFocusTraversalKeysEnabled()));
                 }
+                board[i][j].addMouseListener(board[i][j]);
+                board[i][j].addMouseMotionListener(board[i][j]);
                 tempPanel.add(board[i][j]);
                 temp += 1;
             }
 
         }
-
+        Square.parentBoard = this;
         JPanel grid = new JPanel();
         grid.setLayout(new BorderLayout(0, 0));
         grid.add(bottomPanel, BorderLayout.SOUTH);
@@ -195,8 +197,8 @@ public class Board extends JPanel {
     }
 
     public void clear_add_color() {
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j < 8; j++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 Color originalColor = ((i + j) % 2 == 0) ? new Color(216, 198, 160) : new Color(126, 110, 99);
                 board[i][j].setBackground(originalColor);
                 board[i][j].repaint();

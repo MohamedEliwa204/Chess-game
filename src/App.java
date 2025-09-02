@@ -82,43 +82,6 @@ public class App implements ActionListener {
         cardLayout.show(cardPanel, "Main menu");
     }
 
-    /**
-     * 
-     */
-
-    // public void setLevel() {
-    // level = new JFrame();
-    // level.setTitle("level of engine!");
-    // level.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    // level.setLayout(new FlowLayout());
-    // level.setSize(300, 300);
-    // easy = new JRadioButton("Easy!");
-    // medium = new JRadioButton("Medium!");
-    // hard = new JRadioButton("Hard!");
-    // legend = new JRadioButton("Legend!");
-
-    // // ok = new JButton("OK");
-    // // ok.setPreferredSize(new Dimension(50, 50));
-    // easy.addActionListener(this);
-    // medium.addActionListener(this);
-    // hard.addActionListener(this);
-    // legend.addActionListener(this);
-    // ButtonGroup group = new ButtonGroup();
-
-    // group.add(easy);
-    // group.add(medium);
-    // group.add(hard);
-    // group.add(legend);
-
-    // level.add(easy);
-    // level.add(medium);
-    // level.add(hard);
-    // level.add(legend);
-    // level.pack();
-    // level.setVisible(true);
-
-    // }
-
     public static void main(String[] args) throws Exception {
 
         new App();
