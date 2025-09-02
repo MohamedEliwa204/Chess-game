@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,9 +26,10 @@ public class SettingMenu2 extends JPanel implements ActionListener {
 
     JSpinner spinnerTime;
     JLabel label1;
-
+    JLabel label2;
     JLabel label3;
     JButton back;
+    JComboBox<String> combo;
 
     public SettingMenu2(App controller) {
         this.controller = controller;
@@ -53,14 +55,20 @@ public class SettingMenu2 extends JPanel implements ActionListener {
         start.setBackground(new Color(13, 139, 160));
         start.setForeground(new Color(243, 241, 225));
         start.addActionListener(this);
-        label1 = new JLabel("Player 1 name: ");
+        label1 = new JLabel("Player name: ");
         label1.setBackground(new Color(60, 69, 80));
         label1.setForeground(Color.WHITE);
         label1.setOpaque(true);
         label1.setPreferredSize(new Dimension(250, 50));
         label1.setFont(new Font("Serif", Font.BOLD, 24));
         label1.setHorizontalAlignment(SwingConstants.TRAILING);
-
+        label2 = new JLabel("Level of engine: ");
+        label2.setBackground(new Color(60, 69, 80));
+        label2.setForeground(Color.WHITE);
+        label2.setOpaque(true);
+        label2.setPreferredSize(new Dimension(250, 50));
+        label2.setFont(new Font("Serif", Font.BOLD, 24));
+        label2.setHorizontalAlignment(SwingConstants.TRAILING);
         text1 = new JTextField();
         text1.setPreferredSize(new Dimension(250, 50));
         text1.setFont(new Font("Serif", Font.ITALIC, 24));
@@ -82,6 +90,10 @@ public class SettingMenu2 extends JPanel implements ActionListener {
             spinnerTextField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
             spinnerTextField.setHorizontalAlignment(JTextField.CENTER);
         }
+
+        String[] options = { "Easy", "Medium", "Hard", "Legend" };
+        combo = new JComboBox<>(options);
+        combo.setEditable(false);
         start.setFont(new Font("Georgia", Font.BOLD, 18));
         start.setPreferredSize(new Dimension(300, 70));
         gbc.gridx = 0;
@@ -95,11 +107,12 @@ public class SettingMenu2 extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_END;
+        this.add(label2, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.LINE_START;
-
+        this.add(combo, gbc);
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -124,6 +137,7 @@ public class SettingMenu2 extends JPanel implements ActionListener {
             String n1 = text1.getText();
             String n2 = "Engine";
             int t = (int) spinnerTime.getValue();
+            String lev = (String) combo.getSelectedItem();
             controller.startGame(n1, n2, t);
 
         }
