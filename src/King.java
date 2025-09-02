@@ -9,6 +9,9 @@ public class King extends Piece{
 
     @Override
     boolean isValidMove(int newRow, int newCol,Square[][] board) {
+        if(newRow<0 || newRow>7 || newCol>7 || newCol<0){
+            return false;
+        }
 
         int absRow = Math.abs(row-newRow);
         int absCol = Math.abs(col-newCol);
