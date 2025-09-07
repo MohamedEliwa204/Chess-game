@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -86,7 +87,6 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     }
                 }
             }
-            this.removePiece();
         }
     }
 
@@ -123,15 +123,19 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
             if (targetSquare != null
                     && Dragged_Piece.isValidMove(targetSquare.row, targetSquare.col, parentBoard.board)) {
                 if (targetSquare.isEmpty()) {
+                    Dragged_from_square.removePiece();
                     // here if the square is empty then put the piece and reset the color of the
                     // board again
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
+                    Dragged_Piece.move(targetSquare.row, targetSquare.col);
                 } else {
+                    Dragged_from_square.removePiece();
                     // here there is an enemy's piece then we will kill it
                     parentBoard.setKilledPiece(targetSquare.getPiece());
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
+                    Dragged_Piece.move(targetSquare.row, targetSquare.col);
                 }
             } else {
                 // setting the piece back to it's older place that's because the move isn't
