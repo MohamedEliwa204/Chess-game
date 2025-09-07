@@ -24,10 +24,13 @@ public class Bishop extends Piece{
         int stepCol = (newCol > col) ? 1 : -1;
 
         int c = col, r = row;
-        while (c != newCol || r != newRow) {
+        while (true) {
             c += stepCol;
             r += stepRow;
 
+            if (r == newRow && c == newCol) {
+                break;
+            }
 
             if (!board[r][c].isEmpty()) {
                 return false;
