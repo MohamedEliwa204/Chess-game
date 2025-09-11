@@ -97,6 +97,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        parentBoard.clear_add_color();
         if (Dragged_Piece != null) {
             Square targetSquare = null;
             for (int i = 0; i < 8; i++) {
