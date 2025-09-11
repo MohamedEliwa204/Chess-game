@@ -12,7 +12,7 @@ public class Bishop extends Piece{
         int absRow = Math.abs(newRow-row);
 
 
-        if(newRow < 1 || newRow > 8 || newCol < 1 || newCol > 8) {
+        if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
             return false;
         }
 
@@ -24,10 +24,13 @@ public class Bishop extends Piece{
         int stepCol = (newCol > col) ? 1 : -1;
 
         int c = col, r = row;
-        while (c != newCol || r != newRow) {
+        while (true) {
             c += stepCol;
             r += stepRow;
 
+            if (r == newRow && c == newCol) {
+                break;
+            }
 
             if (!board[r][c].isEmpty()) {
                 return false;

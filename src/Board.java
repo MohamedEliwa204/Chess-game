@@ -110,13 +110,11 @@ public class Board extends JPanel {
                 }
                 if (i == 1) {
                     board[i][j].setPiece(new Pawn("White", i, j,
-                            scaleImage(rowPawnW, IMAGE_SIZE, IMAGE_SIZE),
-                            getVerifyInputWhenFocusTarget()));
+                            scaleImage(rowPawnW, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 6) {
                     board[i][j].setPiece(new Pawn("Black", i, j,
-                            scaleImage(rowPawnB, IMAGE_SIZE, IMAGE_SIZE),
-                            getVerifyInputWhenFocusTarget()));
+                            scaleImage(rowPawnB, IMAGE_SIZE, IMAGE_SIZE)));
                 }
                 if (i == 0 && temp == 'd') {
                     board[i][j]

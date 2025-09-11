@@ -15,20 +15,19 @@ public class Queen extends Piece {
         int absRow = Math.abs(newRow - row);
 
         // The Queen is moving like a rook
-        if (newCol == col || newRow == row) {
-            if (newCol == col) { // vertical move
-                int step = (newRow > row) ? 1 : -1;
-                for (int r = row + step; r != newRow; r += step) {
-                    if (!board[r][col].isEmpty()) {
-                        return false;
-                    }
+        if (newCol == col) { // vertical move
+            int step = (newRow > row) ? 1 : -1;
+            for (int r = row + step; r != newRow; r += step) {
+                if (!board[r][col].isEmpty()) {
+                    return false;
                 }
-            } else { // horizontal move
-                int step = (newCol > col) ? 1 : -1;
-                for (int c = col + step; c != newCol; c += step) {
-                    if (!board[row][c].isEmpty()) {
-                        return false;
-                    }
+            }
+        }
+        else if(newRow==row) { // horizontal move
+            int step = (newCol > col) ? 1 : -1;
+            for (int c = col + step; c != newCol; c += step) {
+                if (!board[row][c].isEmpty()) {
+                    return false;
                 }
             }
         }
@@ -44,16 +43,17 @@ public class Queen extends Piece {
 
                 if (r == newRow && c == newCol) break;
 
-                if (!board[r][c].isEmpty()) {
+                if (!board[r][c].isEmpty() && board[r][c].getPiece().color.equals(color)) {
                     return false;
                 }
             }
-        } else {
+        }
+        else {
             return false;
         }
 
         if (!board[newRow][newCol].isEmpty() &&
-                board[newRow][newCol].piece.color.equals(color)) {
+                board[newRow][newCol].getPiece().color.equals(color)) {
             return false;
         }
 

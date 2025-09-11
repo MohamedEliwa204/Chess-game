@@ -1,37 +1,33 @@
 import javax.swing.*;
 
 public class Pawn extends Piece {
-    boolean start;
-
-    public Pawn(String color, int row, int col, ImageIcon icon, boolean start) {
+    public Pawn(String color, int row, int col, ImageIcon icon) {
         super("Pawn", color, row, col, icon);
-        this.start = start;
     }
 
     @Override
     boolean isValidMove(int newRow, int newCol, Square[][] board) {
-        if(newRow<0 || newRow>7 || newCol>7 || newCol<0){
-            return false;
-        }
-        int absCol = Math.abs(newCol - col);
-        int dir = color.equals("Black") ? -1 : 1;
+        if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) return false;
 
+        int direction = color.equals("White") ? 1 : -1;
+        int moveRow = newRow - row;
+        int moveCol = newCol - col;
 
-        if (absCol == 0 && newRow == row + dir && board[newRow][newCol].isEmpty()) {
+        if (moveCol == 0 && moveRow == direction && board[newRow][newCol].isEmpty()) {
             return true;
         }
 
 
-        if (absCol == 0 && start && newRow == row + 2 * dir
-                && board[row + dir][col].isEmpty()
+        if (moveCol == 0
+                && ((row == 1 && color.equals("White")) || (row == 6 && color.equals("Black")))
+                && moveRow == 2 * direction
+                && board[row + direction][col].isEmpty()
                 && board[newRow][newCol].isEmpty()) {
             return true;
         }
 
-
-        if (absCol == 1 && newRow == row + dir) {
-            Square target = board[newRow][newCol];
-            if (!target.isEmpty() && !target.getPiece().color.equals(color)) {
+        if (Math.abs(moveCol) == 1 && moveRow == direction) {
+            if (!board[newRow][newCol].isEmpty() && !board[newRow][newCol].getPiece().color.equals(color)) {
                 return true;
             }
         }
@@ -42,7 +38,5 @@ public class Pawn extends Piece {
     @Override
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
-        start = false;
     }
-
 }
