@@ -14,6 +14,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     static Square Dragged_from_square;
     static String Player_color;
     static Board parentBoard;
+    Manage manage;
     Piece piece;
     JButton button;
     int row;
@@ -74,7 +75,8 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getSource() == this.button && this.getPiece() != null) {
+        if (e.getSource() == this.button && this.getPiece() != null
+                && Manage.player.get_color().equals(this.piece.color)) {
             Dragged_Piece = this.getPiece();
             Dragged_row = this.row;
             Dragged_col = this.col;
@@ -130,6 +132,8 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                     Dragged_Piece.move(targetSquare.row, targetSquare.col);
+                    manage = new Manage(null);
+                    manage.change_player();
                 } else {
                     Dragged_from_square.removePiece();
                     // here there is an enemy's piece then we will kill it
@@ -137,6 +141,8 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                     Dragged_Piece.move(targetSquare.row, targetSquare.col);
+                    manage.change_player();
+
                 }
             } else {
                 // setting the piece back to it's older place that's because the move isn't

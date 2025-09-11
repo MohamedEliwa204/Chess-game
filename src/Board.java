@@ -24,8 +24,8 @@ public class Board extends JPanel {
     public Square[][] board = new Square[8][8];
     JPanel killed1 = new JPanel(new FlowLayout());
     JPanel killed2 = new JPanel(new FlowLayout());
-    JLabel player_name1 = new JLabel();
-    JLabel player_name2 = new JLabel();
+    static JLabel player_name1 = new JLabel();
+    static JLabel player_name2 = new JLabel();
     JLabel player_time1 = new JLabel();
     JLabel player_time2 = new JLabel();
     // storing the row images.

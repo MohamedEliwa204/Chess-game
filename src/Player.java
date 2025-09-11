@@ -33,6 +33,14 @@ public class Player implements Runnable {
         }
     }
 
+    public String get_name() {
+        return this.name;
+    }
+
+    public String get_color() {
+        return this.color;
+    }
+
     public void startTurn() {
         turn = true;
     }
@@ -58,7 +66,7 @@ public class Player implements Runnable {
         min = 0;
     }
 
-    public void setKilledPiece(Piece killedPiece){
+    public void setKilledPiece(Piece killedPiece) {
         killedPieces.add(killedPiece);
     }
 
@@ -66,7 +74,8 @@ public class Player implements Runnable {
         return killedPieces;
     }
 
-    public String getTime() { // i think this method will be easy when making the time panel and the player finished playing
+    public String getTime() { // i think this method will be easy when making the time panel and the player
+                              // finished playing
         return String.format("%02d:%02d", min, sec);
     }
 }

@@ -27,15 +27,7 @@ public class App implements ActionListener {
     SettingMenu settingMenu;
     SettingMenu2 settingMenu2;
     Board board;
-    JFrame level;
-    JRadioButton easy;
-    JRadioButton medium;
-    JRadioButton hard;
-    JRadioButton legend;
-    JFrame time;
-    JSpinner spinnerTime1;
-
-    // JButton ok;
+    Manage manage;
 
     public App() {
         mainFrame = new JFrame("Elshewy&Gabr Chess Game!");
@@ -52,7 +44,7 @@ public class App implements ActionListener {
         settingMenu = new SettingMenu(this);
         settingMenu2 = new SettingMenu2(this);
         board = new Board();
-
+        manage = new Manage(this);
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.add(mainMenu, "Main menu");
