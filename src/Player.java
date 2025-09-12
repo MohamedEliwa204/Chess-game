@@ -3,34 +3,62 @@ import java.util.ArrayList;
 public class Player implements Runnable {
     private String name;
     private String color;
-    private int sec = 0;
-    private int min = 0;
-    private boolean turn = false;
+    private int sec;
+    private int min;
+    private volatile boolean turn = false;
+    private volatile boolean isRunning = true;
     private ArrayList<Piece> killedPieces;
 
-    public Player(String name, String color) {
+    public Player(String name, String color, int t) {
         this.name = name;
+        this.min = t;
         this.color = color;
         this.killedPieces = new ArrayList<>();
     }
 
     @Override
     public void run() {
-        while (true) {
-            if (turn) {
-                sec++;
-                if (sec == 60) {
-                    min++;
-                    sec = 0;
+        // 3. The outer loop now checks 'isRunning' to allow for a clean exit.
+        while (isRunning) {
+            try {
+                synchronized (this) {
+                    // This loop efficiently waits while it's not our turn.
+                    while (!turn && isRunning) {
+                        // wait() pauses the thread here, using 0% CPU.
+                        this.wait();
+                    }
                 }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    System.out.println(name + " interrupted!");
+
+                // If the thread was woken up just to be shut down, exit the loop.
+                if (!isRunning) {
                     break;
                 }
+
+                // If we get here, it must be our turn. Do the timer work.
+                if (turn) {
+                    // Sleep for one second before decrementing.
+                    Thread.sleep(1000);
+
+                    // Timer logic now counts DOWN.
+                    sec--;
+                    if (sec < 0) {
+                        min--;
+                        sec = 59;
+                    }
+
+                    if (min < 0) {
+                        System.out.println(name + " ran out of time!");
+                        stopTurn(); // Stop your own turn if time runs out.
+                        // You would also notify the main game controller here.
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                // If the thread is interrupted, treat it as a signal to shut down.
+                this.isRunning = false;
             }
         }
+        System.out.println("Timer thread for " + name + " has finished.");
     }
 
     public String get_name() {
@@ -42,11 +70,22 @@ public class Player implements Runnable {
     }
 
     public void startTurn() {
-        turn = true;
+        synchronized (this) {
+            this.turn = true;
+
+            this.notifyAll();
+        }
     }
 
     public void stopTurn() {
         turn = false;
+    }
+
+    public void shutdown() {
+        synchronized (this) {
+            this.isRunning = false;
+            this.notifyAll();
+        }
     }
 
     public boolean isTurn() {
@@ -76,6 +115,6 @@ public class Player implements Runnable {
 
     public String getTime() { // i think this method will be easy when making the time panel and the player
                               // finished playing
-        return String.format("%02d:%02d", min, sec);
+        return String.format("%02d:%02d", Math.max(min, 0), Math.max(0, sec));
     }
 }

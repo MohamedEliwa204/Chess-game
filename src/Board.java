@@ -7,27 +7,35 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
-public class Board extends JPanel {
+public class Board extends JPanel implements ActionListener {
     // initialize board
     // move piece
     // display board
     private static final int IMAGE_SIZE = 60;
     private static final int CAPTURED_IMAGE_SIZE = 25;
+    private Manage gameManager;
+    private Timer displayTimer;
 
     public Square[][] board = new Square[8][8];
     JPanel killed1 = new JPanel(new FlowLayout());
     JPanel killed2 = new JPanel(new FlowLayout());
-    static JLabel player_name1 = new JLabel();
-    static JLabel player_name2 = new JLabel();
+    JLabel player_name1 = new JLabel();
+    JLabel player_name2 = new JLabel();
     JLabel player_time1 = new JLabel();
     JLabel player_time2 = new JLabel();
+    JButton restart;
+    JButton back;
     // storing the row images.
     ImageIcon rowPawnB = new ImageIcon(getClass().getResource("/pieces/pawn_B.png"));
     ImageIcon rowPawnW = new ImageIcon(getClass().getResource("/pieces/pawn_W.png"));
@@ -41,9 +49,11 @@ public class Board extends JPanel {
     ImageIcon rowQueenW = new ImageIcon(getClass().getResource("/pieces/queen_W.png"));
     ImageIcon rowKingB = new ImageIcon(getClass().getResource("/pieces/king_B.png"));
     ImageIcon rowKingW = new ImageIcon(getClass().getResource("/pieces/king_W.png"));
+    private final App controller;
 
-    public Board() {
+    public Board(App controller) {
         // the indexing of the rows and columns of the grid.
+        this.controller = controller;
         JPanel tempPanel = new JPanel(new GridLayout(8, 8));
         this.setLayout(new BorderLayout());
         JPanel leftPanel = new JPanel(new GridLayout(8, 1));
@@ -80,21 +90,36 @@ public class Board extends JPanel {
         killed2.setOpaque(true);
         killed1.setBackground(new Color(232, 224, 200));
         killed2.setBackground(new Color(232, 224, 200));
-
+        restart = new JButton("Restart!");
+        restart.addActionListener(this);
+        restart.setBackground(new Color(227, 2, 2));
+        restart.setFocusPainted(false);
+        restart.setFont(new Font("Arial", Font.BOLD, 18));
+        back = new JButton("Move Back");
+        back.addActionListener(this);
+        back.setBackground(new Color(24, 154, 211));
+        back.setFocusPainted(false);
+        back.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weighty = 0.05;
+        player1.add(restart, gbc);
+        player2.add(back, gbc);
+        gbc.weightx = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.weighty = 0.2;
         player1.add(player_name1, gbc);
         player2.add(player_name2, gbc);
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weighty = 0.2;
         player1.add(player_time1, gbc);
         player2.add(player_time2, gbc);
-        gbc.gridy = 2;
-        gbc.weighty = 0.6;
+        gbc.gridy = 3;
+        gbc.weighty = 0.55;
 
         player1.add(killed1, gbc);
         player2.add(killed2, gbc);
@@ -225,25 +250,49 @@ public class Board extends JPanel {
     // setupGame(player_name1.getText(), player_name2.getText(), min);
     // }
 
-    public void setupGame(String name1, String name2, int min) {
+    public void setupGame(Manage manager) {
+        this.gameManager = manager;
+        this.player_name1.setText(manager.get_player1().get_name());
+        this.player_name2.setText(manager.get_player2().get_name());
 
-        this.player_name1.setText(name1);
-        this.player_name2.setText(name2);
-        this.player_time1.setText(String.format("%02d:%02d", min, 0));
-        this.player_time2.setText(String.format("%02d:%02d", min, 0));
+        this.player_time1.revalidate();
+        this.player_time1.repaint();
+        this.player_time2.setText(manager.get_player2().getTime());
+        this.player_time2.revalidate();
+        this.player_time2.repaint();
         this.player_name1.setHorizontalAlignment(SwingConstants.CENTER);
         this.player_name2.setHorizontalAlignment(SwingConstants.CENTER);
         this.player_time1.setHorizontalAlignment(SwingConstants.CENTER);
         this.player_time2.setHorizontalAlignment(SwingConstants.CENTER);
-        this.player_name1.setFont(new Font("Serif", Font.ITALIC, 24));
-        this.player_name2.setFont(new Font("Serif", Font.ITALIC, 24));
         this.player_time1.setFont(new Font("Monospaced", Font.BOLD, 40));
         this.player_time2.setFont(new Font("Monospaced", Font.BOLD, 40));
+        this.player_name1.setFont(new Font("Serif", Font.ITALIC, 24));
+        this.player_name2.setFont(new Font("Serif", Font.ITALIC, 24));
+
         this.killed1.removeAll();
         this.killed2.removeAll();
         this.killed1.revalidate();
         this.killed1.repaint();
         this.killed2.revalidate();
         this.killed2.repaint();
+
+        updateTime();
+        displayTimer = new Timer(1000, e -> updateTime());
+        displayTimer.start();
+    }
+
+    private void updateTime() {
+        if (gameManager != null) {
+            this.player_time1.setText(gameManager.get_player1().getTime());
+            this.player_time2.setText(gameManager.get_player2().getTime());
+
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == restart) {
+            controller.restart();
+        }
     }
 }

@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class Square extends JLabel implements MouseMotionListener, MouseListener {
     // what is contain, position, is_empty, set_piece, get_piece, remove_piece.
-    static int Dragged_row;
+    int Dragged_row;
     static int Dragged_col;
     static Piece Dragged_Piece;
     static Square Dragged_from_square;
@@ -22,7 +22,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     Color c;
 
     public Square(Color c, int row, int col) {
-
+        // manage = new Manage(null);
         button = new JButton();
         this.setLayout(new BorderLayout());
         this.row = row;
@@ -132,8 +132,8 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                     Dragged_Piece.move(targetSquare.row, targetSquare.col);
-                    manage = new Manage(null);
-                    manage.change_player();
+
+                    Manage.change_player();
                 } else {
                     Dragged_from_square.removePiece();
                     // here there is an enemy's piece then we will kill it
@@ -141,7 +141,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                     Dragged_Piece.move(targetSquare.row, targetSquare.col);
-                    manage.change_player();
+                    Manage.change_player();
 
                 }
             } else {

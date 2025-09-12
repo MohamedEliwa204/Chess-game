@@ -28,6 +28,7 @@ public class App implements ActionListener {
     SettingMenu2 settingMenu2;
     Board board;
     Manage manage;
+    int min;
 
     public App() {
         mainFrame = new JFrame("Elshewy&Gabr Chess Game!");
@@ -43,8 +44,8 @@ public class App implements ActionListener {
         mainMenu = new MainMenu(this);
         settingMenu = new SettingMenu(this);
         settingMenu2 = new SettingMenu2(this);
-        board = new Board();
-        manage = new Manage(this);
+        board = new Board(this);
+
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.add(mainMenu, "Main menu");
@@ -57,8 +58,10 @@ public class App implements ActionListener {
     }
 
     public void startGame(String n1, String n2, int t) {
-        board.setupGame(n1, n2, t);
+        this.manage = new Manage(this, n1, n2, t);
+        board.setupGame(this.manage);
         cardLayout.show(cardPanel, "Play board");
+
     }
 
     public void showSetting() {
@@ -72,6 +75,14 @@ public class App implements ActionListener {
 
     public void backToMain() {
         cardLayout.show(cardPanel, "Main menu");
+    }
+
+    public void restart() {
+        manage.reset();
+        board = new Board(this);
+        board.setupGame(this.manage);
+        cardPanel.add(board, "Play board");
+        cardLayout.show(cardPanel, "Play board");
     }
 
     public static void main(String[] args) throws Exception {
