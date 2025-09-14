@@ -27,7 +27,7 @@ public class Board extends JPanel implements ActionListener {
     private static final int CAPTURED_IMAGE_SIZE = 25;
     private Manage gameManager;
     private Timer displayTimer;
-    static Stack<Piece> pStack;
+    static Stack<Move> moveStack;
     public Square[][] board = new Square[8][8];
     JPanel killed1 = new JPanel(new FlowLayout());
     JPanel killed2 = new JPanel(new FlowLayout());
@@ -55,7 +55,7 @@ public class Board extends JPanel implements ActionListener {
     public Board(App controller) {
         // the indexing of the rows and columns of the grid.
         this.controller = controller;
-        pStack = new Stack<>();
+        moveStack = new Stack<>();
         JPanel tempPanel = new JPanel(new GridLayout(8, 8));
         this.setLayout(new BorderLayout());
         JPanel leftPanel = new JPanel(new GridLayout(8, 1));
@@ -247,6 +247,16 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
+    public void removeKilledPiece(Piece killed) {
+        JPanel targetPanel = killed.getColor().equals("White") ? killed1 : killed2;
+        int count = targetPanel.getComponentCount();
+        if (count > 0) {
+            targetPanel.remove(count - 1);
+            targetPanel.revalidate();
+            targetPanel.repaint();
+        }
+    }
+
     // public void restart() {
     // new Board();
     // setupGame(player_name1.getText(), player_name2.getText(), min);
@@ -291,16 +301,25 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
+    // in Board.java -> actionPerformed()
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == restart) {
             controller.restart();
         }
         if (e.getSource() == back) {
-            Piece temp;
-            temp = pStack.pop();
-            board[temp.parentRow][temp.parentCol].setPiece(temp);
-            board[temp.row][temp.col].removePiece();
+            if (!moveStack.isEmpty()) {
+                Move lastMove = moveStack.pop();
+                Piece pieceToMoveBack = lastMove.movedPiece;
+                board[lastMove.startRow][lastMove.startCol].setPiece(pieceToMoveBack);
+                pieceToMoveBack.move(lastMove.startRow, lastMove.startCol);
+                board[lastMove.endRow][lastMove.endCol].setPiece(lastMove.capturedPiece);
+                if (lastMove.capturedPiece != null) {
+
+                    removeKilledPiece(lastMove.capturedPiece);
+                }
+                Manage.change_player();
+            }
         }
     }
 }

@@ -127,28 +127,34 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
             }
             if (targetSquare != null
                     && Dragged_Piece.isValidMove(targetSquare.row, targetSquare.col, parentBoard.board)) {
-                if (targetSquare.isEmpty()) {
-                    Dragged_from_square.removePiece();
-                    // here if the square is empty then put the piece and reset the color of the
-                    // board again
-                    targetSquare.setPiece(Dragged_Piece);
-                    parentBoard.clear_add_color();
-                    Dragged_Piece.move(targetSquare.row, targetSquare.col);
-                    Board.pStack.add(Dragged_Piece);
-                    Manage.change_player();
-                } else {
-                    Dragged_from_square.removePiece();
-                    // here there is an enemy's piece then we will kill it
-                    targetSquare.getPiece().move(targetSquare.getPiece().row, targetSquare.getPiece().col);
-                    parentBoard.setKilledPiece(targetSquare.getPiece());
-                    Board.pStack.add(targetSquare.getPiece());
-                    targetSquare.setPiece(Dragged_Piece);
-                    parentBoard.clear_add_color();
-                    Dragged_Piece.move(targetSquare.row, targetSquare.col);
-                    Board.pStack.add(Dragged_Piece);
-                    Manage.change_player();
+                Piece capturedPiece = targetSquare.getPiece();
 
+                // 2. Create a single 'Move' object that contains all information about this
+                // turn.
+                Move newMove = new Move(
+                        Dragged_Piece,
+                        Dragged_from_square.getRow(),
+                        Dragged_from_square.getCol(),
+                        targetSquare.getRow(),
+                        targetSquare.getCol(),
+                        capturedPiece);
+
+                // 3. Push the single Move object onto the stack. This works for both captures
+                // and simple moves.
+                Board.moveStack.push(newMove);
+
+                // --- Now, update the board visually ---
+
+                // If a piece was captured, add it to the killed pieces panel.
+                if (capturedPiece != null) {
+                    parentBoard.setKilledPiece(capturedPiece);
                 }
+
+                // These actions are the same for both simple moves and captures.
+                Dragged_from_square.removePiece();
+                targetSquare.setPiece(Dragged_Piece);
+                Dragged_Piece.move(targetSquare.row, targetSquare.col);
+                Manage.change_player();
             } else {
                 // setting the piece back to it's older place that's because the move isn't
                 // valid
