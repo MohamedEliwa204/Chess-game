@@ -1,0 +1,22 @@
+name: Run Java App
+
+on: [workflow_dispatch]   # lets you run manually from Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'   # change to 11 or 21 if needed
+
+      - name: Compile
+        run: javac src/*.java   # change to your file name
+
+      - name: Run
+        run: java -cp src App        # change to your class name
