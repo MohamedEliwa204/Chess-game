@@ -1,6 +1,6 @@
 name: Run Java App
 
-on: [workflow_dispatch]   # lets you run manually from Actions tab
+on: [workflow_dispatch]  # lets you run manually from Actions tab
 
 jobs:
   build:
@@ -13,10 +13,16 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'   # change to 11 or 21 if needed
+          java-version: '17'      # change to 11 or 21 if needed
 
       - name: Compile
-        run: javac src/*.java   # change to your file name
+        run: javac -cp src -d . src/*.java  # Compiles files and places .class in root
 
-      - name: Run
-        run: java -cp src App        # change to your class name
+      - name: Run with Virtual Display
+        run: |
+          # Install the virtual display server
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+          # Run the Java application using the virtual display
+          xvfb-run java -cp . App # Use '.' for classpath, change App to your main class name
