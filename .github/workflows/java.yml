@@ -25,4 +25,6 @@ jobs:
           sudo apt-get install -y xvfb
 
           # Run the Java application using the virtual display
-          xvfb-run java -cp . App # Use '.' for classpath, change App to your main class name
+          # We add 'src' to the classpath so the app can find resource files
+          xvfb-run java -cp .:src App # Use '.:src' for classpath, change App to your main class name
+
