@@ -1,0 +1,30 @@
+name: Run Java App
+
+on: [workflow_dispatch]  # lets you run manually from Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'      # change to 11 or 21 if needed
+
+      - name: Compile
+        run: javac -cp src -d . src/*.java  # Compiles files and places .class in root
+
+      - name: Run with Virtual Display
+        run: |
+          # Install the virtual display server
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+
+          # Run the Java application using the virtual display
+          # We add 'src' to the classpath so the app can find resource files
+          xvfb-run java -cp .:src App # Use '.:src' for classpath, change App to your main class name
+
