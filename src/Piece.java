@@ -6,14 +6,22 @@ abstract class Piece {
     String color;
     int row, col;
     boolean alive = true;
+    int parentRow, parentCol;
 
     public Piece(String name, String color, int row, int col, ImageIcon icon) {
         this.name = name;
         this.color = color;
         this.row = row;
         this.col = col;
+        this.parentCol = col;
+        this.parentRow = row;
         this.icon = icon;
     }
+
+    // public void setParent(int r, int c) {
+    // this.parentCol = c;
+    // this.parentRow = r;
+    // }
 
     public ImageIcon getIcon() {
         return this.icon;
@@ -26,6 +34,8 @@ abstract class Piece {
     abstract boolean isValidMove(int newRow, int newCol, Square[][] board);
 
     void move(int newRow, int newCol) {
+        this.parentCol = col;
+        this.parentRow = row;
         this.row = newRow;
         this.col = newCol;
     }

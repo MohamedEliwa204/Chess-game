@@ -22,9 +22,9 @@ public class Manage {
     }
 
     public void reset() {
-        // player.shutdown();
-        // player1.shutdown();
-        // player2.shutdown();
+        player.shutdown();
+        player1.shutdown();
+        player2.shutdown();
         player1 = new Player(n1, "White", t);
         player2 = new Player(n2, "Black", t);
         new Thread(player1).start();

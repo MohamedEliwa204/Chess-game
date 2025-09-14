@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.*;
+import java.util.Stack;
 
 import javax.swing.*;
 
@@ -14,6 +15,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     static Square Dragged_from_square;
     static String Player_color;
     static Board parentBoard;
+
     Manage manage;
     Piece piece;
     JButton button;
@@ -132,15 +134,18 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                     Dragged_Piece.move(targetSquare.row, targetSquare.col);
-
+                    Board.pStack.add(Dragged_Piece);
                     Manage.change_player();
                 } else {
                     Dragged_from_square.removePiece();
                     // here there is an enemy's piece then we will kill it
+                    targetSquare.getPiece().move(targetSquare.getPiece().row, targetSquare.getPiece().col);
                     parentBoard.setKilledPiece(targetSquare.getPiece());
+                    Board.pStack.add(targetSquare.getPiece());
                     targetSquare.setPiece(Dragged_Piece);
                     parentBoard.clear_add_color();
                     Dragged_Piece.move(targetSquare.row, targetSquare.col);
+                    Board.pStack.add(Dragged_Piece);
                     Manage.change_player();
 
                 }

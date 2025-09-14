@@ -22,8 +22,7 @@ public class Queen extends Piece {
                     return false;
                 }
             }
-        }
-        else if(newRow==row) { // horizontal move
+        } else if (newRow == row) { // horizontal move
             int step = (newCol > col) ? 1 : -1;
             for (int c = col + step; c != newCol; c += step) {
                 if (!board[row][c].isEmpty()) {
@@ -41,14 +40,14 @@ public class Queen extends Piece {
                 r += stepRow;
                 c += stepCol;
 
-                if (r == newRow && c == newCol) break;
+                if (r == newRow && c == newCol)
+                    break;
 
-                if (!board[r][c].isEmpty() && board[r][c].getPiece().color.equals(color)) {
+                if (!board[r][c].isEmpty()) {
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             return false;
         }
 

@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Stack;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,7 +27,7 @@ public class Board extends JPanel implements ActionListener {
     private static final int CAPTURED_IMAGE_SIZE = 25;
     private Manage gameManager;
     private Timer displayTimer;
-
+    static Stack<Piece> pStack;
     public Square[][] board = new Square[8][8];
     JPanel killed1 = new JPanel(new FlowLayout());
     JPanel killed2 = new JPanel(new FlowLayout());
@@ -54,6 +55,7 @@ public class Board extends JPanel implements ActionListener {
     public Board(App controller) {
         // the indexing of the rows and columns of the grid.
         this.controller = controller;
+        pStack = new Stack<>();
         JPanel tempPanel = new JPanel(new GridLayout(8, 8));
         this.setLayout(new BorderLayout());
         JPanel leftPanel = new JPanel(new GridLayout(8, 1));
@@ -293,6 +295,12 @@ public class Board extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == restart) {
             controller.restart();
+        }
+        if (e.getSource() == back) {
+            Piece temp;
+            temp = pStack.pop();
+            board[temp.parentRow][temp.parentCol].setPiece(temp);
+            board[temp.row][temp.col].removePiece();
         }
     }
 }
