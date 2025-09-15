@@ -1,22 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Bishop extends Piece{
-    public Bishop(String color, int row, int col, ImageIcon icon){
+public class Bishop extends Piece {
+    public Bishop(String color, int row, int col, ImageIcon icon) {
         super("Bishop", color, row, col, icon);
     }
 
     @Override
     boolean isValidMove(int newRow, int newCol, Square[][] board) {
-        int absCol = Math.abs(newCol-col);
-        int absRow = Math.abs(newRow-row);
+        int absCol = Math.abs(newCol - col);
+        int absRow = Math.abs(newRow - row);
 
-
-        if(newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
+        if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
             return false;
         }
 
-        if(absCol != absRow) {
+        if (absCol != absRow) {
             return false;
         }
 
@@ -28,7 +27,8 @@ public class Bishop extends Piece{
             c += stepCol;
             r += stepRow;
 
-            if(r<0 || r>7 || c<0 || c>7) return false;
+            if (r < 0 || r > 7 || c < 0 || c > 7)
+                return false;
 
             if (r == newRow && c == newCol) {
                 break;
@@ -39,7 +39,6 @@ public class Bishop extends Piece{
             }
         }
 
-
         if (!board[newRow][newCol].isEmpty() && board[newRow][newCol].piece.color.equals(color)) {
             return false;
         }
@@ -47,10 +46,9 @@ public class Bishop extends Piece{
         return true;
     }
 
-
     @Override
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
-        this.hasMoved=true;
+        // this.hasMoved=true;
     }
 }

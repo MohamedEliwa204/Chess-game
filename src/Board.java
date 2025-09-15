@@ -24,7 +24,7 @@ public class Board extends JPanel implements ActionListener {
     // move piece
     // display board
     private static final int IMAGE_SIZE = 60;
-    private static final int CAPTURED_IMAGE_SIZE = 25;
+    private static final int CAPTURED_IMAGE_SIZE = 35;
     private Manage gameManager;
     private Timer displayTimer;
     static Stack<Move> moveStack;
