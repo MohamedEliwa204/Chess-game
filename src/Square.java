@@ -181,7 +181,11 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
                 String opponentColor = currentColor.equals("White") ? "Black" : "White";
                 GameManage.CheckingState(opponentColor);
-
+                Piece promotedPawn = GameManage.isTherePromotion();
+                if(promotedPawn!=null){
+                    Pawn pawn = (Pawn) promotedPawn;
+                    GameLogic.PawnPromote(pawn,Square.parentBoard);
+                }
                 Manage.change_player();
 
             } else {
