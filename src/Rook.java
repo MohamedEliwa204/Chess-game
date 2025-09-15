@@ -11,6 +11,7 @@ public class Rook extends Piece{
             if (newCol == col) { // the rook will move vertically
                 int step = (newRow > row) ? 1 : -1;
                 for (int r = row + step; r != newRow; r += step) {
+                    if (r < 0 || r > 7) return false;
                     if (!board[r][col].isEmpty()) {
                         return false;
                     }
@@ -23,6 +24,7 @@ public class Rook extends Piece{
             if(newRow==row){ // the rook will move horizontally
                 int step = (newCol> col) ? 1 : -1 ;
                 for(int c= col + step ; c != newCol ; c+=step){
+                    if (c < 0 || c > 7) return false;
                     if(!board[row][c].isEmpty()){
                         return false;
                     }
@@ -39,5 +41,6 @@ public class Rook extends Piece{
     @Override
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
+        this.hasMoved=true;
     }
 }
