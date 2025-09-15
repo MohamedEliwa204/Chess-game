@@ -13,7 +13,6 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     static int Dragged_col;
     static Piece Dragged_Piece;
     static Square Dragged_from_square;
-    static String Player_color;
     static Board parentBoard;
 
     Manage manage;
@@ -77,22 +76,45 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
     @Override
     public void mousePressed(MouseEvent e) {
+        // must be a piece of the current player
         if (e.getSource() == this.button && this.getPiece() != null
                 && Manage.player.get_color().equals(this.piece.color)) {
+
+            if (GameLogic.isInCheck(Manage.player.get_color(), parentBoard)) {
+                if (!GameLogic.possiblePieces.contains(this.getPiece())) {
+                    // not allowed, ignore this click
+                    return;
+                }
+            }
+
             Dragged_Piece = this.getPiece();
             Dragged_row = this.row;
             Dragged_col = this.col;
             Dragged_from_square = this;
+
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     if (Dragged_Piece.isValidMove(i, j, parentBoard.board)) {
-                        parentBoard.board[i][j].setBackground(Color.GREEN);
-                        parentBoard.board[i][j].repaint();
+                        // simulate move: only show legal moves that don’t leave king in check
+                        Piece captured = parentBoard.board[i][j].getPiece();
+                        parentBoard.board[Dragged_row][Dragged_col].setPiece(null);
+                        parentBoard.board[i][j].setPiece(Dragged_Piece);
+
+                        boolean stillCheck = GameLogic.isInCheck(Dragged_Piece.color, parentBoard);
+
+                        parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
+                        parentBoard.board[i][j].setPiece(captured);
+
+                        if (!stillCheck) {
+                            parentBoard.board[i][j].setBackground(Color.GREEN);
+                            parentBoard.board[i][j].repaint();
+                        }
                     }
                 }
             }
         }
     }
+
 
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -154,7 +176,14 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 Dragged_from_square.removePiece();
                 targetSquare.setPiece(Dragged_Piece);
                 Dragged_Piece.move(targetSquare.row, targetSquare.col);
+                // here i want to make the logic of checking the state of the game at all
+                String currentColor = Manage.player.get_color();
+
+                String opponentColor = currentColor.equals("White") ? "Black" : "White";
+                GameManage.CheckingState(opponentColor);
+
                 Manage.change_player();
+
             } else {
                 // setting the piece back to it's older place that's because the move isn't
                 // valid
@@ -186,11 +215,4 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
     }
 
-    // @Override
-    // public void actionPerformed(ActionEvent e) {
-    // // TODO Auto-generated method stub
-    // if (e.getSource() == button) {
-    // System.out.printf("%d %d", row, col);
-    // }
-    // }
 }
