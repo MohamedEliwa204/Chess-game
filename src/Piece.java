@@ -9,6 +9,7 @@ abstract class Piece {
     int row, col;
     boolean alive = true;
     Stack<Integer> parentRow, parentCol;
+    boolean hasMoved = false;
 
     public Piece(String name, String color, int row, int col, ImageIcon icon) {
         this.name = name;
