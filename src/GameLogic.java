@@ -5,17 +5,26 @@ import javax.swing.JOptionPane;
 
 public class GameLogic {
 
-    ArrayList<Piece> possiblePieces = new ArrayList<>();
-
-    public boolean isInCheck(String KingColor, Board board) {
+   static ArrayList<Piece> possiblePieces = new ArrayList<>();
+   static Piece White_King ;
+   static Piece Black_King;
+    public static boolean isInCheck(String KingColor, Board board) {
         int row = -1, col = -1;
         Square[][] Grid = board.board;
+        // Here i am searching for the king position in the board
         outer: for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Piece piece = Grid[i][j].getPiece();
                 if (piece != null && piece instanceof King && piece.color.equals(KingColor)) {
+                    // finally i found the king
                     row = i;
                     col = j;
+                    if(KingColor.equals("Black")){
+                        Black_King=Grid[i][j].getPiece();
+                    }
+                    else{
+                        White_King=Grid[i][j].getPiece();
+                    }
                     break outer;
                 }
             }
@@ -30,8 +39,21 @@ public class GameLogic {
         }
         return false;
     }
+    // overloaded method for the King
+    public static boolean isInCheck(String kingColor, Square[][] grid, int kingRow, int kingCol) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = grid[i][j].getPiece();
+                if (piece != null && !piece.color.equals(kingColor) && piece.isValidMove(kingRow, kingCol, grid)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-    public void PawnPromote(Pawn pawn, Board board) {
+
+    public static void PawnPromote(Pawn pawn, Board board) {
         Square[][] Grid = board.board;
         if ((pawn.color.equals("Black") && pawn.row == 0) ||
                 (pawn.color.equals("White") && pawn.row == 7)) {
@@ -45,15 +67,15 @@ public class GameLogic {
                     null,
                     options,
                     options[0]);
-            // here i don't have the paths yet so i wrote anything
-            ImageIcon queenImage = pawn.color.equals("White") ? new ImageIcon("white_queen.png")
-                    : new ImageIcon("black_queen.png");
-            ImageIcon bishopImage = pawn.color.equals("White") ? new ImageIcon("white_bishop.png")
-                    : new ImageIcon("black_bishop.png");
-            ImageIcon rookImage = pawn.color.equals("White") ? new ImageIcon("white_rook.png")
-                    : new ImageIcon("black_rook.png");
-            ImageIcon knightImage = pawn.color.equals("White") ? new ImageIcon("white_knight.png")
-                    : new ImageIcon("black_knight.png");
+
+            ImageIcon queenImage = pawn.color.equals("White") ? new ImageIcon("/pieces/queen_W.png")
+                    : new ImageIcon("/pieces/queen_B.png");
+            ImageIcon bishopImage = pawn.color.equals("White") ? new ImageIcon("/pieces/bishop_W.png")
+                    : new ImageIcon("/pieces/bishop_B.png");
+            ImageIcon rookImage = pawn.color.equals("White") ? new ImageIcon("/pieces/rook_W.png")
+                    : new ImageIcon("/pieces/rook_B.png");
+            ImageIcon knightImage = pawn.color.equals("White") ? new ImageIcon("/pieces/Knight_W.png")
+                    : new ImageIcon("/pieces/Knight_B.png");
 
             switch (choice) {
                 case 0:
@@ -72,19 +94,20 @@ public class GameLogic {
         }
     }
 
-    public char WinLoseDrawContinue(Board board, String TurnColor) {
+    public static GameState WinLoseDrawContinue(Board board, String TurnColor) {
+        GameState gameState = new GameState();
         possiblePieces.clear();
-        boolean isCheck = isInCheck(TurnColor, board);
+        gameState.isInCheck = isInCheck(TurnColor, board);
         Square[][] Grid = board.board;
 
-        if (isCheck) {
+        if (gameState.isInCheck) {
             boolean hasEscape = false;
-            for (int i = 1; i <= 8; i++) {
-                for (int j = 1; j <= 8; j++) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j <= 7; j++) {
                     Piece myPiece = Grid[i][j].getPiece();
                     if (myPiece != null && myPiece.color.equals(TurnColor)) {
-                        for (int r = 1; r <= 8; r++) {
-                            for (int c = 1; c <= 8; c++) {
+                        for (int r = 0; r <=7; r++) {
+                            for (int c = 0; c <= 7; c++) {
                                 if (myPiece.isValidMove(r, c, Grid)) {
                                     Piece captured = Grid[r][c].getPiece();
                                     Grid[i][j].setPiece(null);
@@ -101,24 +124,26 @@ public class GameLogic {
                     }
                 }
             }
-            return hasEscape ? 'C' : 'L';
+            gameState.state = hasEscape ? 'C' : 'L';
+            return gameState;
         } else {
-            for (int i = 1; i <= 8; i++) {
-                for (int j = 1; j <= 8; j++) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
                     Piece myPiece = Grid[i][j].getPiece();
                     if (myPiece != null && myPiece.color.equals(TurnColor)) {
-                        for (int r = 1; r <= 8; r++) {
-                            for (int c = 1; c <= 8; c++) {
+                        for (int r = 0; r < 8; r++) {
+                            for (int c = 0; c < 8; c++) {
                                 if (myPiece.isValidMove(r, c, Grid)) {
-                                    return 'C';
+                                    gameState.state ='C';
+                                    return gameState;
                                 }
                             }
                         }
                     }
                 }
             }
-            return 'D';
+            gameState.state ='D';
+            return gameState;
         }
     }
-
 }
