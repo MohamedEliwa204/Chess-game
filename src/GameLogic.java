@@ -1,9 +1,12 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class GameLogic {
+
+    private static final int IMAGE_SIZE = 60;
 
    static ArrayList<Piece> possiblePieces = new ArrayList<>();
    static Piece White_King ;
@@ -68,27 +71,38 @@ public class GameLogic {
                     options,
                     options[0]);
 
-            ImageIcon queenImage = pawn.color.equals("White") ? new ImageIcon("/pieces/queen_W.png")
-                    : new ImageIcon("/pieces/queen_B.png");
-            ImageIcon bishopImage = pawn.color.equals("White") ? new ImageIcon("/pieces/bishop_W.png")
-                    : new ImageIcon("/pieces/bishop_B.png");
-            ImageIcon rookImage = pawn.color.equals("White") ? new ImageIcon("/pieces/rook_W.png")
-                    : new ImageIcon("/pieces/rook_B.png");
-            ImageIcon knightImage = pawn.color.equals("White") ? new ImageIcon("/pieces/Knight_W.png")
-                    : new ImageIcon("/pieces/Knight_B.png");
+            ImageIcon queenImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/queen_W.png"))
+                    : new ImageIcon(GameLogic.class.getResource("/pieces/queen_B.png"));
+            ImageIcon bishopImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/bishop_W.png"))
+                    : new ImageIcon(GameLogic.class.getResource("/pieces/bishop_B.png"));
+            ImageIcon rookImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/rook_W.png"))
+                    : new ImageIcon(GameLogic.class.getResource("/pieces/rook_B.png"));
+            ImageIcon knightImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/Knight_W.png"))
+                    : new ImageIcon(GameLogic.class.getResource("/pieces/Knight_B.png"));
 
             switch (choice) {
                 case 0:
-                    Grid[pawn.row][pawn.col].setPiece(new Queen(pawn.color, pawn.row, pawn.col, queenImage));
+                    Grid[pawn.row][pawn.col].removePiece();
+                    Grid[pawn.row][pawn.col].setPiece(new Queen(pawn.color, pawn.row, pawn.col, scaleImage(queenImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].repaint();
                     break;
                 case 1:
-                    Grid[pawn.row][pawn.col].setPiece(new Bishop(pawn.color, pawn.row, pawn.col, bishopImage));
+                    Grid[pawn.row][pawn.col].removePiece();
+                    Grid[pawn.row][pawn.col].setPiece(new Bishop(pawn.color, pawn.row, pawn.col, scaleImage(bishopImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].repaint();
+
                     break;
                 case 2:
-                    Grid[pawn.row][pawn.col].setPiece(new Rook(pawn.color, pawn.row, pawn.col, rookImage));
+                    Grid[pawn.row][pawn.col].removePiece();
+                    Grid[pawn.row][pawn.col].setPiece(new Rook(pawn.color, pawn.row, pawn.col, scaleImage(rookImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].repaint();
+
                     break;
                 case 3:
-                    Grid[pawn.row][pawn.col].setPiece(new Knight(pawn.color, pawn.row, pawn.col, knightImage));
+                    Grid[pawn.row][pawn.col].removePiece();
+                    Grid[pawn.row][pawn.col].setPiece(new Knight(pawn.color, pawn.row, pawn.col, scaleImage(knightImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].repaint();
+
                     break;
             }
         }
@@ -116,8 +130,10 @@ public class GameLogic {
                                         hasEscape = true;
                                         possiblePieces.add(myPiece);
                                     }
+
                                     Grid[i][j].setPiece(myPiece);
                                     Grid[r][c].setPiece(captured);
+
                                 }
                             }
                         }
@@ -146,4 +162,11 @@ public class GameLogic {
             return gameState;
         }
     }
+
+    private static ImageIcon scaleImage(ImageIcon icon, int w, int h) {
+        Image img = icon.getImage();
+        Image resized = img.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(resized);
+    }
+
 }
