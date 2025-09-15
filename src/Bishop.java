@@ -28,6 +28,8 @@ public class Bishop extends Piece{
             c += stepCol;
             r += stepRow;
 
+            if(r<0 || r>7 || c<0 || c>7) return false;
+
             if (r == newRow && c == newCol) {
                 break;
             }
@@ -49,5 +51,6 @@ public class Bishop extends Piece{
     @Override
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
+        this.hasMoved=true;
     }
 }
