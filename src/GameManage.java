@@ -64,4 +64,23 @@ public class GameManage {
             }
         }
     }
+
+
+    public static Piece isTherePromotion(){
+        Square[][] board = Square.parentBoard.board;
+        for(int j =0 ; j<=7 ; j++){
+            if(!board[0][j].isEmpty() && board[0][j].getPiece().name.equals("Pawn") && board[0][j].getPiece().color.equals("Black")){
+
+                return board[0][j].getPiece();
+            }
+
+            if(!board[7][j].isEmpty() && board[7][j].getPiece().name.equals("Pawn") && board[7][j].getPiece().color.equals("White")){
+
+                return board[7][j].getPiece();
+            }
+
+
+        }
+        return null;
+    }
 }
