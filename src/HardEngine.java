@@ -3,7 +3,6 @@ import java.util.List;
 
 public class HardEngine implements ChessEngine {
     final int INF = Integer.MAX_VALUE;
-    Move bestMove;
 
     public int minimax(Square[][] board, int depth, boolean maximizing) {
         if (depth == 0) {
@@ -22,9 +21,7 @@ public class HardEngine implements ChessEngine {
             int maxEval = -INF;
             for (Move move : legalMoves(board, maximizing)) {
                 int eval = minimax(boardAfterMove(board, move), depth - 1, false);
-                if (eval > maxEval) {
-                    this.bestMove = move;
-                }
+
                 maxEval = Math.max(eval, maxEval);
 
             }
@@ -102,8 +99,18 @@ public class HardEngine implements ChessEngine {
 
     @Override
     public Move findBestMove(Square[][] board, String aiColor) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findBestMove'");
-    }
+        boolean maximizing = true;
+        int bestVal = -INF;
+        Move bestMove = null;
 
+        for (Move move : legalMoves(board, maximizing)) {
+            int eval = minimax(boardAfterMove(board, move), 10, !maximizing);
+            if (eval > bestVal) {
+                bestVal = eval;
+                bestMove = move;
+            }
+        }
+
+        return bestMove;
+    }
 }
