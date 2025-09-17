@@ -3,6 +3,7 @@ import java.util.List;
 
 public class HardEngine implements ChessEngine {
     final int INF = Integer.MAX_VALUE;
+    Move bestMove;
 
     public int minimax(Square[][] board, int depth, boolean maximizing) {
         if (depth == 0) {
@@ -21,8 +22,13 @@ public class HardEngine implements ChessEngine {
             int maxEval = -INF;
             for (Move move : legalMoves(board, maximizing)) {
                 int eval = minimax(boardAfterMove(board, move), depth - 1, false);
+                if (eval > maxEval) {
+                    this.bestMove = move;
+                }
                 maxEval = Math.max(eval, maxEval);
+
             }
+
             return maxEval;
 
         } else {
