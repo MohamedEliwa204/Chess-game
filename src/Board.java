@@ -131,9 +131,9 @@ public class Board extends JPanel implements ActionListener {
             for (int j = 0; j < 8; j++) {
 
                 if ((i + j) % 2 == 0) {
-                    board[i][j] = new Square(new Color(216, 198, 160), i, j);
+                    board[i][j] = new Square(this.controller, new Color(216, 198, 160), i, j);
                 } else {
-                    board[i][j] = new Square(new Color(126, 110, 99), i, j);
+                    board[i][j] = new Square(this.controller, new Color(126, 110, 99), i, j);
                 }
                 if (i == 1) {
                     board[i][j].setPiece(new Pawn("White", i, j,

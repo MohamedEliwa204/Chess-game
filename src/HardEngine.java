@@ -81,7 +81,7 @@ public class HardEngine implements ChessEngine {
         Square[][] newBoard = new Square[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                newBoard[i][j] = new Square(originalBoard[i][j].c, i, j);
+                newBoard[i][j] = new Square(null, originalBoard[i][j].c, i, j);
                 if (!originalBoard[i][j].isEmpty()) {
                     newBoard[i][j].setPiece(originalBoard[i][j].getPiece().clone());
                 }

@@ -138,6 +138,17 @@ public class SettingMenu2 extends JPanel implements ActionListener {
             String n2 = "Engine";
             int t = (int) spinnerTime.getValue();
             String lev = (String) combo.getSelectedItem();
+            if (lev.equals("Easy")) {
+                controller.easy = new EasyEngine();
+                controller.level = "Easy";
+            } else if (lev.equals("Medium")) {
+                controller.medium = new MediumEngine();
+                controller.level = "Medium";
+
+            } else if (lev.equals("Hard")) {
+                controller.hard = new HardEngine();
+                controller.level = "Hard";
+            }
             controller.startGame(n1, n2, t);
 
         }

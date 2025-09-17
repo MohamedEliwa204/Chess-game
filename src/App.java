@@ -29,6 +29,10 @@ public class App implements ActionListener {
     Board board;
     Manage manage;
     int min;
+    EasyEngine easy;
+    MediumEngine medium;
+    HardEngine hard;
+    String level;
 
     public App() {
         mainFrame = new JFrame("Elshewy&Gabr Chess Game!");
@@ -55,6 +59,15 @@ public class App implements ActionListener {
 
         mainFrame.add(cardPanel);
         mainFrame.setVisible(true);
+    }
+
+    public void MakeMove(Move move) {
+        Piece piece = move.movedPiece;
+        board.board[move.startRow][move.startCol].removePiece();
+        board.board[move.endRow][move.endCol].setPiece(piece);
+        if (move.capturedPiece != null) {
+            board.setKilledPiece(move.capturedPiece);
+        }
     }
 
     public void startGame(String n1, String n2, int t) {
@@ -88,6 +101,7 @@ public class App implements ActionListener {
     public static void main(String[] args) throws Exception {
 
         new App();
+
     }
 
     @Override
