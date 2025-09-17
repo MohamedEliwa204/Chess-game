@@ -51,4 +51,10 @@ public class Bishop extends Piece {
         super.move(newRow, newCol);
         // this.hasMoved=true;
     }
+
+    @Override
+    public Bishop clone() {
+
+        return new Bishop(this.color, this.row, this.col, this.icon);
+    }
 }

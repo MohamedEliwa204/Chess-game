@@ -2,7 +2,7 @@ import java.util.Stack;
 
 import javax.swing.*;
 
-abstract class Piece {
+abstract class Piece implements Cloneable {
     ImageIcon icon;
     String name;
     String color;
@@ -42,4 +42,8 @@ abstract class Piece {
         this.row = newRow;
         this.col = newCol;
     }
+
+    @Override
+    public abstract Piece clone();
+
 }

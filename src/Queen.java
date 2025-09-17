@@ -18,13 +18,13 @@ public class Queen extends Piece {
         if (newCol == col) { // vertical move
             int step = (newRow > row) ? 1 : -1;
             for (int r = row + step; r != newRow; r += step) {
-                if(r<0 || r>7) return false;
+                if (r < 0 || r > 7)
+                    return false;
                 if (!board[r][col].isEmpty()) {
                     return false;
                 }
             }
-        }
-        else if(newRow==row) { // horizontal move
+        } else if (newRow == row) { // horizontal move
             int step = (newCol > col) ? 1 : -1;
             for (int c = col + step; c != newCol; c += step) {
                 if (!board[row][c].isEmpty()) {
@@ -42,14 +42,14 @@ public class Queen extends Piece {
                 r += stepRow;
                 c += stepCol;
 
-                if (r == newRow && c == newCol) break;
+                if (r == newRow && c == newCol)
+                    break;
 
                 if (!board[r][c].isEmpty()) {
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -64,5 +64,11 @@ public class Queen extends Piece {
     @Override
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
+    }
+
+    @Override
+    public Queen clone() {
+
+        return new Queen(this.color, this.row, this.col, this.icon);
     }
 }

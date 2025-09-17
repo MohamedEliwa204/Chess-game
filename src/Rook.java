@@ -45,4 +45,10 @@ public class Rook extends Piece {
         super.move(newRow, newCol);
         // this.hasMoved=true;
     }
+
+    @Override
+    public Rook clone() {
+
+        return new Rook(this.color, this.row, this.col, this.icon);
+    }
 }

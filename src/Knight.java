@@ -7,13 +7,13 @@ public class Knight extends Piece {
 
     @Override
     boolean isValidMove(int newRow, int newCol, Square[][] board) {
-        if(newRow>=0 && newRow<=7 && newCol>=0 && newCol<=7){
+        if (newRow >= 0 && newRow <= 7 && newCol >= 0 && newCol <= 7) {
             Square target = board[newRow][newCol];
-            if(target.isEmpty() || !target.getPiece().color.equals(color)){
-                if((newRow==row+2 || newRow==row-2) && (newCol== col+1 || newCol==col-1)){
+            if (target.isEmpty() || !target.getPiece().color.equals(color)) {
+                if ((newRow == row + 2 || newRow == row - 2) && (newCol == col + 1 || newCol == col - 1)) {
                     return true;
                 }
-                if((newRow==row+1 || newRow == row-1) && (newCol==col-2 || newCol == col+2)){
+                if ((newRow == row + 1 || newRow == row - 1) && (newCol == col - 2 || newCol == col + 2)) {
                     return true;
                 }
                 return false;
@@ -27,4 +27,9 @@ public class Knight extends Piece {
         super.move(newRow, newCol);
     }
 
+    @Override
+    public Knight clone() {
+
+        return new Knight(this.color, this.row, this.col, this.icon);
+    }
 }

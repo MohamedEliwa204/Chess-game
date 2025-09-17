@@ -7,7 +7,8 @@ public class Pawn extends Piece {
 
     @Override
     boolean isValidMove(int newRow, int newCol, Square[][] board) {
-        if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) return false;
+        if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7)
+            return false;
 
         int direction = color.equals("White") ? 1 : -1;
         int moveRow = newRow - row;
@@ -16,7 +17,6 @@ public class Pawn extends Piece {
         if (moveCol == 0 && moveRow == direction && board[newRow][newCol].isEmpty()) {
             return true;
         }
-
 
         if (moveCol == 0
                 && ((row == 1 && color.equals("White")) || (row == 6 && color.equals("Black")))
@@ -38,5 +38,11 @@ public class Pawn extends Piece {
     @Override
     void move(int newRow, int newCol) {
         super.move(newRow, newCol);
+    }
+
+    @Override
+    public Pawn clone() {
+
+        return new Pawn(this.color, this.row, this.col, this.icon);
     }
 }
