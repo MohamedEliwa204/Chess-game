@@ -3,20 +3,23 @@ import java.util.List;
 
 public class HardEngine implements ChessEngine {
     final int INF = Integer.MAX_VALUE;
+    GameState state;
+    GameLogic logic;
 
     public int minimax(Square[][] board, int depth, boolean maximizing) {
         if (depth == 0) {
-            // return evaluate(board);
+            return evaluateBoard(board);
         }
-        /*
-         * if(game over && maximizing){
-         * return INF;
-         * }
-         * if(game over && !maximizing){
-         * return -INF;
-         * }
-         * 
-         */
+        logic = new GameLogic();
+        state = logic.WinLoseDrawContinue(board, maximizing ? "Black" : "White");
+
+        if (state.state == 'L' && maximizing) {
+            return -INF;
+        }
+        if (state.state == 'L' && !maximizing) {
+            return INF;
+        }
+
         if (maximizing) {
             int maxEval = -INF;
             for (Move move : legalMoves(board, maximizing)) {

@@ -8,9 +8,10 @@ public class GameLogic {
 
     private static final int IMAGE_SIZE = 60;
 
-   static ArrayList<Piece> possiblePieces = new ArrayList<>();
-   static Piece White_King ;
-   static Piece Black_King;
+    static ArrayList<Piece> possiblePieces = new ArrayList<>();
+    static Piece White_King;
+    static Piece Black_King;
+
     public static boolean isInCheck(String KingColor, Board board) {
         int row = -1, col = -1;
         Square[][] Grid = board.board;
@@ -22,11 +23,10 @@ public class GameLogic {
                     // finally i found the king
                     row = i;
                     col = j;
-                    if(KingColor.equals("Black")){
-                        Black_King=Grid[i][j].getPiece();
-                    }
-                    else{
-                        White_King=Grid[i][j].getPiece();
+                    if (KingColor.equals("Black")) {
+                        Black_King = Grid[i][j].getPiece();
+                    } else {
+                        White_King = Grid[i][j].getPiece();
                     }
                     break outer;
                 }
@@ -42,6 +42,7 @@ public class GameLogic {
         }
         return false;
     }
+
     // overloaded method for the King
     public static boolean isInCheck(String kingColor, Square[][] grid, int kingRow, int kingCol) {
         for (int i = 0; i < 8; i++) {
@@ -54,7 +55,6 @@ public class GameLogic {
         }
         return false;
     }
-
 
     public static void PawnPromote(Pawn pawn, Board board) {
         Square[][] Grid = board.board;
@@ -71,36 +71,44 @@ public class GameLogic {
                     options,
                     options[0]);
 
-            ImageIcon queenImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/queen_W.png"))
+            ImageIcon queenImage = pawn.color.equals("White")
+                    ? new ImageIcon(GameLogic.class.getResource("/pieces/queen_W.png"))
                     : new ImageIcon(GameLogic.class.getResource("/pieces/queen_B.png"));
-            ImageIcon bishopImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/bishop_W.png"))
+            ImageIcon bishopImage = pawn.color.equals("White")
+                    ? new ImageIcon(GameLogic.class.getResource("/pieces/bishop_W.png"))
                     : new ImageIcon(GameLogic.class.getResource("/pieces/bishop_B.png"));
-            ImageIcon rookImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/rook_W.png"))
+            ImageIcon rookImage = pawn.color.equals("White")
+                    ? new ImageIcon(GameLogic.class.getResource("/pieces/rook_W.png"))
                     : new ImageIcon(GameLogic.class.getResource("/pieces/rook_B.png"));
-            ImageIcon knightImage = pawn.color.equals("White") ? new ImageIcon(GameLogic.class.getResource("/pieces/Knight_W.png"))
+            ImageIcon knightImage = pawn.color.equals("White")
+                    ? new ImageIcon(GameLogic.class.getResource("/pieces/Knight_W.png"))
                     : new ImageIcon(GameLogic.class.getResource("/pieces/Knight_B.png"));
 
             switch (choice) {
                 case 0:
                     Grid[pawn.row][pawn.col].removePiece();
-                    Grid[pawn.row][pawn.col].setPiece(new Queen(pawn.color, pawn.row, pawn.col, scaleImage(queenImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].setPiece(
+                            new Queen(pawn.color, pawn.row, pawn.col, scaleImage(queenImage, IMAGE_SIZE, IMAGE_SIZE)));
                     Grid[pawn.row][pawn.col].repaint();
                     break;
                 case 1:
                     Grid[pawn.row][pawn.col].removePiece();
-                    Grid[pawn.row][pawn.col].setPiece(new Bishop(pawn.color, pawn.row, pawn.col, scaleImage(bishopImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].setPiece(new Bishop(pawn.color, pawn.row, pawn.col,
+                            scaleImage(bishopImage, IMAGE_SIZE, IMAGE_SIZE)));
                     Grid[pawn.row][pawn.col].repaint();
 
                     break;
                 case 2:
                     Grid[pawn.row][pawn.col].removePiece();
-                    Grid[pawn.row][pawn.col].setPiece(new Rook(pawn.color, pawn.row, pawn.col, scaleImage(rookImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].setPiece(
+                            new Rook(pawn.color, pawn.row, pawn.col, scaleImage(rookImage, IMAGE_SIZE, IMAGE_SIZE)));
                     Grid[pawn.row][pawn.col].repaint();
 
                     break;
                 case 3:
                     Grid[pawn.row][pawn.col].removePiece();
-                    Grid[pawn.row][pawn.col].setPiece(new Knight(pawn.color, pawn.row, pawn.col, scaleImage(knightImage,IMAGE_SIZE,IMAGE_SIZE)));
+                    Grid[pawn.row][pawn.col].setPiece(new Knight(pawn.color, pawn.row, pawn.col,
+                            scaleImage(knightImage, IMAGE_SIZE, IMAGE_SIZE)));
                     Grid[pawn.row][pawn.col].repaint();
 
                     break;
@@ -120,7 +128,7 @@ public class GameLogic {
                 for (int j = 0; j <= 7; j++) {
                     Piece myPiece = Grid[i][j].getPiece();
                     if (myPiece != null && myPiece.color.equals(TurnColor)) {
-                        for (int r = 0; r <=7; r++) {
+                        for (int r = 0; r <= 7; r++) {
                             for (int c = 0; c <= 7; c++) {
                                 if (myPiece.isValidMove(r, c, Grid)) {
                                     Piece captured = Grid[r][c].getPiece();
@@ -150,7 +158,7 @@ public class GameLogic {
                         for (int r = 0; r < 8; r++) {
                             for (int c = 0; c < 8; c++) {
                                 if (myPiece.isValidMove(r, c, Grid)) {
-                                    gameState.state ='C';
+                                    gameState.state = 'C';
                                     return gameState;
                                 }
                             }
@@ -158,7 +166,7 @@ public class GameLogic {
                     }
                 }
             }
-            gameState.state ='D';
+            gameState.state = 'D';
             return gameState;
         }
     }
