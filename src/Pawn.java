@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 import javax.swing.*;
 
 public class Pawn extends Piece {
@@ -43,6 +45,14 @@ public class Pawn extends Piece {
     @Override
     public Pawn clone() {
 
-        return new Pawn(this.color, this.row, this.col, this.icon);
+        Pawn newPawn = new Pawn(this.color, this.row, this.col, this.icon);
+
+        newPawn.hasMoved = this.hasMoved;
+        newPawn.alive = this.alive;
+
+        newPawn.parentRow = (Stack<Integer>) this.parentRow.clone();
+        newPawn.parentCol = (Stack<Integer>) this.parentCol.clone();
+
+        return newPawn;
     }
 }

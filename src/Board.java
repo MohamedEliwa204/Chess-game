@@ -280,7 +280,9 @@ public class Board extends JPanel implements ActionListener {
         this.player_time2.setFont(new Font("Monospaced", Font.BOLD, 40));
         this.player_name1.setFont(new Font("Serif", Font.ITALIC, 24));
         this.player_name2.setFont(new Font("Serif", Font.ITALIC, 24));
-
+        if (player_name2.getText().equals("Engine")) {
+            this.back.setEnabled(false);
+        }
         this.killed1.removeAll();
         this.killed2.removeAll();
         this.killed1.revalidate();

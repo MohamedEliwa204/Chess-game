@@ -198,7 +198,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
             }
             if (Manage.player.get_name().equals("Engine")) {
-                Timer timer = new Timer(3000, new ActionListener() {
+                Timer timer = new Timer(1000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         Move move;

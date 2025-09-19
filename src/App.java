@@ -63,6 +63,8 @@ public class App implements ActionListener {
 
     public void MakeMove(Move move) {
         Piece piece = move.movedPiece;
+        piece.row = move.endRow;
+        piece.col = move.endCol;
         board.board[move.startRow][move.startCol].removePiece();
         board.board[move.endRow][move.endCol].setPiece(piece);
         if (move.capturedPiece != null) {
@@ -92,6 +94,7 @@ public class App implements ActionListener {
 
     public void restart() {
         manage.reset();
+        cardPanel.remove(board);
         board = new Board(this);
         board.setupGame(this.manage);
         cardPanel.add(board, "Play board");

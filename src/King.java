@@ -4,7 +4,6 @@ public class King extends Piece {
     boolean safe;
     boolean hasCastled = false;
 
-
     public King(String color, int row, int col, ImageIcon icon, boolean safe) {
         super("King", color, row, col, icon);
         this.safe = safe;
@@ -35,12 +34,13 @@ public class King extends Piece {
                     if (!rook.hasMoved) {
                         if (board[row][col + 1].isEmpty() && board[row][col + 2].isEmpty()) {
 
+                            if (GameLogic.isInCheck(color, board, row, col))
+                                return false;
 
-                            if (GameLogic.isInCheck(color, board,row,col)) return false;
-
-
-                            if (GameLogic.isInCheck(color, board, row, col + 1)) return false;
-                            if (GameLogic.isInCheck(color, board, row, col + 2)) return false;
+                            if (GameLogic.isInCheck(color, board, row, col + 1))
+                                return false;
+                            if (GameLogic.isInCheck(color, board, row, col + 2))
+                                return false;
 
                             return true;
                         }
@@ -54,12 +54,16 @@ public class King extends Piece {
                 if (!rookSquare.isEmpty() && rookSquare.getPiece() instanceof Rook) {
                     Rook rook = (Rook) rookSquare.getPiece();
                     if (!rook.hasMoved) {
-                        if (board[row][col - 1].isEmpty() && board[row][col - 2].isEmpty() && board[row][col - 3].isEmpty()) {
+                        if (board[row][col - 1].isEmpty() && board[row][col - 2].isEmpty()
+                                && board[row][col - 3].isEmpty()) {
 
-                            if (GameLogic.isInCheck(color, board,row,col)) return false;
+                            if (GameLogic.isInCheck(color, board, row, col))
+                                return false;
 
-                            if (GameLogic.isInCheck(color, board, row, col - 1)) return false;
-                            if (GameLogic.isInCheck(color, board, row, col - 2)) return false;
+                            if (GameLogic.isInCheck(color, board, row, col - 1))
+                                return false;
+                            if (GameLogic.isInCheck(color, board, row, col - 2))
+                                return false;
 
                             return true;
                         }
@@ -67,7 +71,6 @@ public class King extends Piece {
                 }
             }
         }
-
 
         return false;
     }

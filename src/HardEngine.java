@@ -3,24 +3,29 @@ import java.util.List;
 
 public class HardEngine implements ChessEngine {
     final int INF = Integer.MAX_VALUE;
+    int cnt = 0;
 
     public int minimax(Square[][] board, int depth, int alpha, int beta, boolean maximizing) {
+        System.out.println("node number: " + ++cnt);
         if (depth == 0) {
             return (int) Math.round(evaluateBoard(board));
         }
         if (GameLogic.WinLoseDrawContinue(board, maximizing ? "Black" : "White").state == 'L') {
-            return maximizing ? -1000 : 1000;
+            return maximizing ? -INF / 2 : INF / 2;
+        }
+        if (GameLogic.WinLoseDrawContinue(board, maximizing ? "Black" : "White").state == 'D') {
+            return 0;
         }
 
         if (maximizing) {
             int maxEval = -INF;
             for (Move move : legalMoves(board, maximizing)) {
-                int eval = minimax(boardAfterMove(board, move).board, alpha, beta, depth - 1, false);
-                alpha = Math.max(eval, alpha);
+                int eval = minimax(boardAfterMove(board, move).board, depth - 1, alpha, beta, false);
+                maxEval = Math.max(eval, maxEval);
+                alpha = Math.max(maxEval, alpha);
                 if (beta <= alpha) {
                     break;
                 }
-                maxEval = Math.max(eval, maxEval);
 
             }
 
@@ -29,12 +34,14 @@ public class HardEngine implements ChessEngine {
         } else {
             int minEval = INF;
             for (Move move : legalMoves(board, maximizing)) {
-                int eval = minimax(boardAfterMove(board, move).board, alpha, beta, depth - 1, true);
-                beta = Math.min(eval, beta);
+
+                int eval = minimax(boardAfterMove(board, move).board, depth - 1, alpha, beta, true);
+                minEval = Math.min(eval, minEval);
+                beta = Math.min(minEval, beta);
                 if (beta <= alpha) {
                     break;
                 }
-                minEval = Math.min(eval, minEval);
+
             }
             return minEval;
         }
@@ -505,40 +512,45 @@ public class HardEngine implements ChessEngine {
     }
 
     private List<Move> legalMoves(Square[][] board, boolean maximizing) {
-        List<Move> result = new ArrayList<>();
+        List<Move> pseudoLegalMoves = new ArrayList<>();
+        List<Move> legalMoves = new ArrayList<>();
+        String playerColor = maximizing ? "Black" : "White";
+
+        // Step 1: Generate all pseudo-legal moves (your current logic)
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (maximizing) {
-                    if (!board[i][j].isEmpty() && board[i][j].getPiece().color.equals("Black")) {
-                        Piece piece = board[i][j].getPiece();
-                        for (int r = 0; r < 8; r++) {
-                            for (int c = 0; c < 8; c++) {
-                                if (piece.isValidMove(r, c, board)) {
-                                    Piece captured = board[r][c].getPiece();
-                                    result.add(new Move(piece, i, j, r, c, captured));
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (!board[i][j].isEmpty() && board[i][j].getPiece().color.equals("White")) {
-                        Piece piece = board[i][j].getPiece();
-                        for (int r = 0; r < 8; r++) {
-                            for (int c = 0; c < 8; c++) {
-                                if (piece.isValidMove(r, c, board)) {
-                                    Piece captured = board[r][c].getPiece();
-                                    result.add(new Move(piece, i, j, r, c, captured));
-                                }
+                if (!board[i][j].isEmpty() && board[i][j].getPiece().color.equals(playerColor)) {
+                    Piece piece = board[i][j].getPiece();
+                    for (int r = 0; r < 8; r++) {
+                        for (int c = 0; c < 8; c++) {
+                            if (piece.isValidMove(r, c, board)) {
+                                Piece captured = board[r][c].getPiece();
+                                pseudoLegalMoves.add(new Move(piece, i, j, r, c, captured));
                             }
                         }
                     }
                 }
             }
         }
-        return result;
+
+        // Step 2: For each pseudo-legal move, check if it's actually legal
+        for (Move move : pseudoLegalMoves) {
+            // Create a temporary board to test the move
+            BoardState tempState = boardAfterMove(board, move);
+
+            // Find the king on the temporary board
+            King king = maximizing ? tempState.blackKing : tempState.whiteKing;
+
+            // If the king is NOT in check after the move, it's a legal move
+            if (!GameLogic.isInCheck(playerColor, tempState.board, king.row, king.col)) {
+                legalMoves.add(move);
+            }
+        }
+
+        return legalMoves;
     }
 
-    private BoardState boardAfterMove(Square[][] originalBoard, Move move) {
+    public BoardState boardAfterMove(Square[][] originalBoard, Move move) {
         BoardState TheNewState = new BoardState();
         Square[][] newBoard = new Square[8][8];
         King White_King = null;
@@ -564,9 +576,14 @@ public class HardEngine implements ChessEngine {
         }
 
         Piece pieceToMove = newBoard[move.startRow][move.startCol].getPiece();
-        newBoard[move.startRow][move.startCol].removePiece();
-        newBoard[move.endRow][move.endCol].setPiece(pieceToMove);
 
+        if (pieceToMove != null) {
+            // THIS IS THE FIX: Tell the piece its new coordinates.
+            pieceToMove.move(move.endRow, move.endCol);
+
+            newBoard[move.startRow][move.startCol].removePiece();
+            newBoard[move.endRow][move.endCol].setPiece(pieceToMove);
+        }
         TheNewState.board = newBoard;
         TheNewState.blackKing = Black_King;
         TheNewState.whiteKing = White_King;
@@ -582,7 +599,7 @@ public class HardEngine implements ChessEngine {
         Move bestMove = null;
 
         for (Move move : legalMoves(board, maximizing)) {
-            int eval = minimax(boardAfterMove(board, move).board, 3, -INF, INF, !maximizing);
+            int eval = minimax(boardAfterMove(board, move).board, 2, -INF, INF, !maximizing);
             if (eval > bestVal) {
                 bestVal = eval;
                 bestMove = move;
