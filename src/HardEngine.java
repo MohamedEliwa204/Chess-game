@@ -4,20 +4,22 @@ import java.util.List;
 public class HardEngine implements ChessEngine {
     final int INF = Integer.MAX_VALUE;
 
-    public int minimax(Square[][] board, int depth, boolean maximizing) {
+    public int minimax(Square[][] board, int depth, int alpha, int beta, boolean maximizing) {
         if (depth == 0) {
             return (int) Math.round(evaluateBoard(board));
         }
-        if (isInCheck(maximizing ? "Black" : "White", board)) {
+        if (GameLogic.WinLoseDrawContinue(board, maximizing ? "Black" : "White").state == 'L') {
             return maximizing ? -1000 : 1000;
-
         }
 
         if (maximizing) {
             int maxEval = -INF;
             for (Move move : legalMoves(board, maximizing)) {
-                int eval = minimax(boardAfterMove(board, move).board, depth - 1, false);
-
+                int eval = minimax(boardAfterMove(board, move).board, alpha, beta, depth - 1, false);
+                alpha = Math.max(eval, alpha);
+                if (beta <= alpha) {
+                    break;
+                }
                 maxEval = Math.max(eval, maxEval);
 
             }
@@ -27,7 +29,11 @@ public class HardEngine implements ChessEngine {
         } else {
             int minEval = INF;
             for (Move move : legalMoves(board, maximizing)) {
-                int eval = minimax(boardAfterMove(board, move).board, depth - 1, true);
+                int eval = minimax(boardAfterMove(board, move).board, alpha, beta, depth - 1, true);
+                beta = Math.min(eval, beta);
+                if (beta <= alpha) {
+                    break;
+                }
                 minEval = Math.min(eval, minEval);
             }
             return minEval;
@@ -532,7 +538,7 @@ public class HardEngine implements ChessEngine {
         return result;
     }
 
-    private Square[][] boardAfterMove(Square[][] originalBoard, Move move) {
+    private BoardState boardAfterMove(Square[][] originalBoard, Move move) {
         BoardState TheNewState = new BoardState();
         Square[][] newBoard = new Square[8][8];
         King White_King = null;
@@ -576,7 +582,7 @@ public class HardEngine implements ChessEngine {
         Move bestMove = null;
 
         for (Move move : legalMoves(board, maximizing)) {
-            int eval = minimax(boardAfterMove(board, move).board, 10, !maximizing);
+            int eval = minimax(boardAfterMove(board, move).board, 3, -INF, INF, !maximizing);
             if (eval > bestVal) {
                 bestVal = eval;
                 bestMove = move;
@@ -584,36 +590,6 @@ public class HardEngine implements ChessEngine {
         }
 
         return bestMove;
-    }
-
-    private boolean isInCheck(String KingColor, Square[][] Grid) {
-        int row = -1, col = -1;
-        Piece White_King, Black_King;
-        outer: for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = Grid[i][j].getPiece();
-                if (piece != null && piece instanceof King && piece.color.equals(KingColor)) {
-                    // finally i found the king
-                    row = i;
-                    col = j;
-                    if (KingColor.equals("Black")) {
-                        Black_King = Grid[i][j].getPiece();
-                    } else {
-                        White_King = Grid[i][j].getPiece();
-                    }
-                    break outer;
-                }
-            }
-        }
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = Grid[i][j].getPiece();
-                if (piece != null && !piece.color.equals(KingColor) && piece.isValidMove(row, col, Grid)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
 }

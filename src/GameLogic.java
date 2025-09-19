@@ -12,9 +12,9 @@ public class GameLogic {
     static Piece White_King;
     static Piece Black_King;
 
-    public static boolean isInCheck(String KingColor, Board board) {
+    public static boolean isInCheck(String KingColor, Square[][] Grid) {
         int row = -1, col = -1;
-        Square[][] Grid = board.board;
+
         // Here i am searching for the king position in the board
         outer: for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -116,11 +116,10 @@ public class GameLogic {
         }
     }
 
-    public static GameState WinLoseDrawContinue(Board board, String TurnColor) {
+    public static GameState WinLoseDrawContinue(Square[][] Grid, String TurnColor) {
         GameState gameState = new GameState();
         possiblePieces.clear();
-        gameState.isInCheck = isInCheck(TurnColor, board);
-        Square[][] Grid = board.board;
+        gameState.isInCheck = isInCheck(TurnColor, Grid);
 
         if (gameState.isInCheck) {
             boolean hasEscape = false;
@@ -134,7 +133,7 @@ public class GameLogic {
                                     Piece captured = Grid[r][c].getPiece();
                                     Grid[i][j].setPiece(null);
                                     Grid[r][c].setPiece(myPiece);
-                                    if (!isInCheck(myPiece.color, board)) {
+                                    if (!isInCheck(myPiece.color, Grid)) {
                                         hasEscape = true;
                                         possiblePieces.add(myPiece);
                                     }

@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameManage {
-    public static void CheckingState(String opponentColor){
+    public static void CheckingState(String opponentColor) {
         Board parent = Square.parentBoard;
         Piece king = opponentColor.equals("Black") ? GameLogic.Black_King : GameLogic.White_King;
 
-        GameState gameState = GameLogic.WinLoseDrawContinue(parent, opponentColor);
+        GameState gameState = GameLogic.WinLoseDrawContinue(parent.board, opponentColor);
 
         if (gameState.state == 'C') {
             boolean hasKing = false;
@@ -35,9 +35,8 @@ public class GameManage {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.INFORMATION_MESSAGE,
                     null,
-                    new String[]{"Play Again", "Quit"},
-                    "Play Again"
-            );
+                    new String[] { "Play Again", "Quit" },
+                    "Play Again");
 
             if (choice == JOptionPane.YES_OPTION) {
                 // reset board
@@ -53,9 +52,8 @@ public class GameManage {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.INFORMATION_MESSAGE,
                     null,
-                    new String[]{"Play Again", "Quit"},
-                    "Play Again"
-            );
+                    new String[] { "Play Again", "Quit" },
+                    "Play Again");
 
             if (choice == JOptionPane.YES_OPTION) {
                 // reset board
@@ -65,20 +63,20 @@ public class GameManage {
         }
     }
 
-
-    public static Piece isTherePromotion(){
+    public static Piece isTherePromotion() {
         Square[][] board = Square.parentBoard.board;
-        for(int j =0 ; j<=7 ; j++){
-            if(!board[0][j].isEmpty() && board[0][j].getPiece().name.equals("Pawn") && board[0][j].getPiece().color.equals("Black")){
+        for (int j = 0; j <= 7; j++) {
+            if (!board[0][j].isEmpty() && board[0][j].getPiece().name.equals("Pawn")
+                    && board[0][j].getPiece().color.equals("Black")) {
 
                 return board[0][j].getPiece();
             }
 
-            if(!board[7][j].isEmpty() && board[7][j].getPiece().name.equals("Pawn") && board[7][j].getPiece().color.equals("White")){
+            if (!board[7][j].isEmpty() && board[7][j].getPiece().name.equals("Pawn")
+                    && board[7][j].getPiece().color.equals("White")) {
 
                 return board[7][j].getPiece();
             }
-
 
         }
         return null;

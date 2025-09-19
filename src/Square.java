@@ -84,7 +84,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
         if (e.getSource() == this.button && this.getPiece() != null
                 && Manage.player.get_color().equals(this.piece.color)) {
 
-            if (GameLogic.isInCheck(Manage.player.get_color(), parentBoard)) {
+            if (GameLogic.isInCheck(Manage.player.get_color(), parentBoard.board)) {
                 if (!GameLogic.possiblePieces.contains(this.getPiece())) {
                     // not allowed, ignore this click
                     return;
@@ -104,7 +104,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                         parentBoard.board[Dragged_row][Dragged_col].setPiece(null);
                         parentBoard.board[i][j].setPiece(Dragged_Piece);
 
-                        boolean stillCheck = GameLogic.isInCheck(Dragged_Piece.color, parentBoard);
+                        boolean stillCheck = GameLogic.isInCheck(Dragged_Piece.color, parentBoard.board);
 
                         parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
                         parentBoard.board[i][j].setPiece(captured);
@@ -198,14 +198,24 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
             }
             if (Manage.player.get_name().equals("Engine")) {
-                if (controller.level.equals("Easy")) {
-                    Move move = controller.easy.findBestMove(controller.board.board, "Black");
-                    controller.MakeMove(move);
-                } else if (controller.level.equals("Medium")) {
-                    Move move = controller.medium.findBestMove(controller.board.board, "Black");
-                    controller.MakeMove(move);
-                }
-                Manage.change_player();
+                Timer timer = new Timer(3000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        Move move;
+                        if (controller.level.equals("Easy")) {
+                            move = controller.easy.findBestMove(controller.board.board, "Black");
+                        } else if (controller.level.equals("Medium")) {
+                            move = controller.medium.findBestMove(controller.board.board, "Black");
+                        } else {
+                            move = controller.hard.findBestMove(controller.board.board, "Black");
+                        }
+                        Board.moveStack.push(move);
+                        controller.MakeMove(move);
+                        Manage.change_player();
+                    }
+                });
+                timer.setRepeats(false); // only run once
+                timer.start();
             }
 
             Dragged_Piece = null;
