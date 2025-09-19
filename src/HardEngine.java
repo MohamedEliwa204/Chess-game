@@ -1,13 +1,16 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class HardEngine implements ChessEngine {
     final int INF = Integer.MAX_VALUE;
 
     public int minimax(Square[][] board, int depth, boolean maximizing) {
         if (depth == 0) {
             return (int) Math.round(evaluateBoard(board));
+        }
+        if (isInCheck(maximizing ? "Black" : "White", board)) {
+            return maximizing ? -1000 : 1000;
+
         }
 
         if (maximizing) {
@@ -21,8 +24,7 @@ public class HardEngine implements ChessEngine {
 
             return maxEval;
 
-        }
-        else {
+        } else {
             int minEval = INF;
             for (Move move : legalMoves(board, maximizing)) {
                 int eval = minimax(boardAfterMove(board, move).board, depth - 1, true);
@@ -32,42 +34,35 @@ public class HardEngine implements ChessEngine {
         }
 
     }
-    private double GivePieceValue(Piece piece){
-        if(piece instanceof Pawn){
+
+    private double GivePieceValue(Piece piece) {
+        if (piece instanceof Pawn) {
             return 1;
-        }
-        else if(piece instanceof Knight){
+        } else if (piece instanceof Knight) {
             return 3;
-        }
-        else if(piece instanceof Bishop){
+        } else if (piece instanceof Bishop) {
             return 3.25;
-        }
-        else if(piece instanceof Rook){
+        } else if (piece instanceof Rook) {
             return 5;
-        }
-        else if(piece instanceof Queen){
+        } else if (piece instanceof Queen) {
             return 9;
-        }
-        else if(piece instanceof King){
+        } else if (piece instanceof King) {
 
             return 0.0;
-        }
-        else{
+        } else {
             throw new IllegalArgumentException("Unknown piece type");
         }
     }
 
-
-    private double MaterialBalance(Square[][] board){
-        double score=0;
-        for (int i=0 ; i<8 ; i++){
-            for (int j=0 ; j<8 ; j++){
-                if(!board[i][j].isEmpty()){
-                    if(board[i][j].getPiece().color.equals("Black")){
-                        score+=GivePieceValue(board[i][j].getPiece());
-                    }
-                    else{
-                        score-=GivePieceValue(board[i][j].getPiece());
+    private double MaterialBalance(Square[][] board) {
+        double score = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!board[i][j].isEmpty()) {
+                    if (board[i][j].getPiece().color.equals("Black")) {
+                        score += GivePieceValue(board[i][j].getPiece());
+                    } else {
+                        score -= GivePieceValue(board[i][j].getPiece());
                     }
                 }
             }
@@ -78,7 +73,7 @@ public class HardEngine implements ChessEngine {
     private double KingSafety(BoardState state, boolean isEndGame) {
         double score = 0;
 
-        //  Check detection
+        // Check detection
         if (GameLogic.isInCheck(state.blackKing.color, state.board, state.blackKing.row, state.blackKing.col)) {
             score -= 1000;
         }
@@ -86,7 +81,7 @@ public class HardEngine implements ChessEngine {
             score += 1000;
         }
 
-        //  Castling bonus
+        // Castling bonus
         if (state.blackKing.hasCastled) {
             score += 0.5;
         }
@@ -102,7 +97,7 @@ public class HardEngine implements ChessEngine {
         score += evaluateExposure(state.blackKing, state.board, true);
         score -= evaluateExposure(state.whiteKing, state.board, false);
 
-        //  Game phase adjustment
+        // Game phase adjustment
         if (!isEndGame) { // Opening/Middlegame
             score += kingCenterPenalty(state.blackKing, true);
             score -= kingCenterPenalty(state.whiteKing, false);
@@ -116,8 +111,8 @@ public class HardEngine implements ChessEngine {
         score -= evaluateThreatsNearKing(state.whiteKing, state.board, false);
 
         // The King has escape squares or not
-        score+= evaluateEscapeSquares(state.blackKing, state.board);
-        score-= evaluateEscapeSquares(state.whiteKing, state.board);
+        score += evaluateEscapeSquares(state.blackKing, state.board);
+        score -= evaluateEscapeSquares(state.whiteKing, state.board);
 
         return score;
     }
@@ -125,8 +120,8 @@ public class HardEngine implements ChessEngine {
     private double evaluateEscapeSquares(King king, Square[][] board) {
         int row = king.row;
         int col = king.col;
-        int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
+        int[] dr = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dc = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
         int safeSquares = 0;
 
@@ -146,7 +141,6 @@ public class HardEngine implements ChessEngine {
         return 0.0;
     }
 
-
     private double evaluateThreatsNearKing(King king, Square[][] board, boolean isBlack) {
         double score = 0.0;
         int row = king.row;
@@ -156,9 +150,12 @@ public class HardEngine implements ChessEngine {
             for (int c = Math.max(0, col - 2); c <= Math.min(7, col + 2); c++) {
                 Piece p = board[r][c].getPiece();
                 if (p != null && !p.color.equals(king.color)) {
-                    if (p instanceof Queen) score -= 0.5;
-                    else if (p instanceof Rook) score -= 0.4;
-                    else if (p instanceof Bishop || p instanceof Knight) score -= 0.3;
+                    if (p instanceof Queen)
+                        score -= 0.5;
+                    else if (p instanceof Rook)
+                        score -= 0.4;
+                    else if (p instanceof Bishop || p instanceof Knight)
+                        score -= 0.3;
                 }
             }
         }
@@ -166,22 +163,18 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private double evaluatePawnShield(King king, Square[][] board, boolean isBlack) {
         double score = 0.0;
 
         int row = king.row;
         int col = king.col;
 
-
         int dir = isBlack ? -1 : 1;
         int shieldRow = row + dir;
-
 
         if (shieldRow < 0 || shieldRow > 7) {
             return score;
         }
-
 
         for (int c = col - 1; c <= col + 1; c++) {
             if (c >= 0 && c < 8) {
@@ -196,7 +189,6 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private double evaluateExposure(King king, Square[][] board, boolean isBlack) {
         double score = 0.0;
         int row = king.row;
@@ -210,10 +202,11 @@ public class HardEngine implements ChessEngine {
                 break;
             }
         }
-        if (!pawnOnFile) score -= 0.4;
+        if (!pawnOnFile)
+            score -= 0.4;
 
-        int[] dr = {-1, -1, 1, 1};
-        int[] dc = {-1, 1, -1, 1};
+        int[] dr = { -1, -1, 1, 1 };
+        int[] dc = { -1, 1, -1, 1 };
         for (int d = 0; d < 4; d++) {
             int r = row + dr[d];
             int c = col + dc[d];
@@ -246,7 +239,6 @@ public class HardEngine implements ChessEngine {
         return 0.0;
     }
 
-
     private double Mobility(Square[][] board, boolean isBlack) {
         double mobility = 0;
         for (int i = 0; i < 8; i++) {
@@ -266,7 +258,6 @@ public class HardEngine implements ChessEngine {
         return mobility * 0.1;
     }
 
-
     private double PST(Square[][] board) {
         double score = 0;
         boolean isEndGame = GamePhase.isEndgame(board);
@@ -279,8 +270,7 @@ public class HardEngine implements ChessEngine {
                     int pstRow = piece.color.equals("White") ? 7 - i : i;
 
                     double value = PieceSquareTables.getPieceSquareValue(
-                            piece, pstRow, j, piece.color.equals("Black"), isEndGame
-                    );
+                            piece, pstRow, j, piece.color.equals("Black"), isEndGame);
 
                     if (piece.color.equals("Black")) {
                         score += value; // AI
@@ -304,7 +294,6 @@ public class HardEngine implements ChessEngine {
                     int dir = isBlack ? -1 : 1;
                     boolean passed = true;
 
-
                     for (int r = row + dir; r >= 0 && r < 8; r += dir) {
                         for (int c = Math.max(0, col - 1); c <= Math.min(7, col + 1); c++) {
                             Piece enemy = board[r][c].getPiece();
@@ -323,7 +312,6 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private double evaluateDoubledPawns(Square[][] board) {
         double score = 0.0;
         for (int col = 0; col < 8; col++) {
@@ -331,12 +319,16 @@ public class HardEngine implements ChessEngine {
             for (int row = 0; row < 8; row++) {
                 Piece p = board[row][col].getPiece();
                 if (p instanceof Pawn) {
-                    if (p.color.equals("Black")) blackCount++;
-                    else whiteCount++;
+                    if (p.color.equals("Black"))
+                        blackCount++;
+                    else
+                        whiteCount++;
                 }
             }
-            if (blackCount > 1) score -= 0.25 * (blackCount - 1);
-            if (whiteCount > 1) score += 0.25 * (whiteCount - 1);
+            if (blackCount > 1)
+                score -= 0.25 * (blackCount - 1);
+            if (whiteCount > 1)
+                score += 0.25 * (whiteCount - 1);
         }
         return score;
     }
@@ -379,19 +371,22 @@ public class HardEngine implements ChessEngine {
             for (int j = 0; j < 8; j++) {
                 Piece p = board[i][j].getPiece();
                 if (p instanceof Bishop) {
-                    if (p.color.equals("Black")) blackBishops++;
-                    else whiteBishops++;
+                    if (p.color.equals("Black"))
+                        blackBishops++;
+                    else
+                        whiteBishops++;
                 }
             }
         }
 
         double score = 0.0;
-        if (blackBishops >= 2) score += 0.5;
-        if (whiteBishops >= 2) score -= 0.5;
+        if (blackBishops >= 2)
+            score += 0.5;
+        if (whiteBishops >= 2)
+            score -= 0.5;
 
         return score;
     }
-
 
     private double evaluateRookFiles(Square[][] board) {
         double score = 0.0;
@@ -401,8 +396,10 @@ public class HardEngine implements ChessEngine {
             for (int row = 0; row < 8; row++) {
                 Piece p = board[row][col].getPiece();
                 if (p instanceof Pawn) {
-                    if (p.color.equals("Black")) hasBlackPawn = true;
-                    else hasWhitePawn = true;
+                    if (p.color.equals("Black"))
+                        hasBlackPawn = true;
+                    else
+                        hasWhitePawn = true;
                 }
             }
 
@@ -410,11 +407,15 @@ public class HardEngine implements ChessEngine {
                 Piece p = board[row][col].getPiece();
                 if (p instanceof Rook) {
                     if (p.color.equals("Black")) {
-                        if (!hasBlackPawn && !hasWhitePawn) score += 0.5;  // open file
-                        else if (!hasBlackPawn) score += 0.25;            // semi-open
+                        if (!hasBlackPawn && !hasWhitePawn)
+                            score += 0.5; // open file
+                        else if (!hasBlackPawn)
+                            score += 0.25; // semi-open
                     } else {
-                        if (!hasWhitePawn && !hasBlackPawn) score -= 0.5;
-                        else if (!hasWhitePawn) score -= 0.25;
+                        if (!hasWhitePawn && !hasBlackPawn)
+                            score -= 0.5;
+                        else if (!hasWhitePawn)
+                            score -= 0.25;
                     }
                 }
             }
@@ -422,14 +423,12 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private double CenterControl(Square[][] board) {
         double score = 0.0;
 
-
         int[][] centers = {
-                {3, 3}, {3, 4}, // d4, e4
-                {4, 3}, {4, 4}  // d5, e5
+                { 3, 3 }, { 3, 4 }, // d4, e4
+                { 4, 3 }, { 4, 4 } // d5, e5
         };
 
         for (int[] pos : centers) {
@@ -449,13 +448,11 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private double evaluateBoard(Square[][] board) {
         double score = 0.0;
 
         BoardState state = new BoardState();
         state.board = board;
-
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -501,7 +498,6 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private List<Move> legalMoves(Square[][] board, boolean maximizing) {
         List<Move> result = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
@@ -536,7 +532,7 @@ public class HardEngine implements ChessEngine {
         return result;
     }
 
-    private BoardState boardAfterMove(Square[][] originalBoard, Move move) {
+    private Square[][] boardAfterMove(Square[][] originalBoard, Move move) {
         BoardState TheNewState = new BoardState();
         Square[][] newBoard = new Square[8][8];
         King White_King = null;
@@ -544,16 +540,15 @@ public class HardEngine implements ChessEngine {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
 
-                newBoard[i][j] = new Square(null,originalBoard[i][j].c, i, j);
+                newBoard[i][j] = new Square(null, originalBoard[i][j].c, i, j);
 
                 if (!originalBoard[i][j].isEmpty()) {
                     Piece ClonedPiece = originalBoard[i][j].getPiece().clone();
                     newBoard[i][j].setPiece(ClonedPiece);
-                    if(ClonedPiece instanceof King){
-                        if(ClonedPiece.color.equals("White")){
+                    if (ClonedPiece instanceof King) {
+                        if (ClonedPiece.color.equals("White")) {
                             White_King = (King) ClonedPiece;
-                        }
-                        else{
+                        } else {
                             Black_King = (King) ClonedPiece;
                         }
                     }
@@ -566,9 +561,9 @@ public class HardEngine implements ChessEngine {
         newBoard[move.startRow][move.startCol].removePiece();
         newBoard[move.endRow][move.endCol].setPiece(pieceToMove);
 
-        TheNewState.board=newBoard;
-        TheNewState.blackKing=Black_King;
-        TheNewState.whiteKing=White_King;
+        TheNewState.board = newBoard;
+        TheNewState.blackKing = Black_King;
+        TheNewState.whiteKing = White_King;
 
         return TheNewState;
 
@@ -589,6 +584,36 @@ public class HardEngine implements ChessEngine {
         }
 
         return bestMove;
+    }
+
+    private boolean isInCheck(String KingColor, Square[][] Grid) {
+        int row = -1, col = -1;
+        Piece White_King, Black_King;
+        outer: for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = Grid[i][j].getPiece();
+                if (piece != null && piece instanceof King && piece.color.equals(KingColor)) {
+                    // finally i found the king
+                    row = i;
+                    col = j;
+                    if (KingColor.equals("Black")) {
+                        Black_King = Grid[i][j].getPiece();
+                    } else {
+                        White_King = Grid[i][j].getPiece();
+                    }
+                    break outer;
+                }
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece piece = Grid[i][j].getPiece();
+                if (piece != null && !piece.color.equals(KingColor) && piece.isValidMove(row, col, Grid)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
