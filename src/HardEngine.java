@@ -75,7 +75,6 @@ public class HardEngine implements ChessEngine {
         return score;
     }
 
-
     private double KingSafety(BoardState state, boolean isEndGame) {
         double score = 0;
 
