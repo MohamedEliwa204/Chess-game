@@ -119,6 +119,7 @@ public class GameLogic {
     public static GameState WinLoseDrawContinue(Square[][] Grid, String TurnColor) {
         GameState gameState = new GameState();
         possiblePieces.clear();
+
         gameState.isInCheck = isInCheck(TurnColor, Grid);
 
         if (gameState.isInCheck) {
@@ -133,6 +134,7 @@ public class GameLogic {
                                     Piece captured = Grid[r][c].getPiece();
                                     Grid[i][j].setPiece(null);
                                     Grid[r][c].setPiece(myPiece);
+
                                     if (!isInCheck(myPiece.color, Grid)) {
                                         hasEscape = true;
                                         possiblePieces.add(myPiece);
@@ -140,7 +142,6 @@ public class GameLogic {
 
                                     Grid[i][j].setPiece(myPiece);
                                     Grid[r][c].setPiece(captured);
-
                                 }
                             }
                         }
@@ -150,6 +151,7 @@ public class GameLogic {
             gameState.state = hasEscape ? 'C' : 'L';
             return gameState;
         } else {
+            // check stalemate
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     Piece myPiece = Grid[i][j].getPiece();
@@ -169,6 +171,7 @@ public class GameLogic {
             return gameState;
         }
     }
+
 
     private static ImageIcon scaleImage(ImageIcon icon, int w, int h) {
         Image img = icon.getImage();

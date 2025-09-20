@@ -77,35 +77,50 @@ public class King extends Piece {
 
     @Override
     void move(int newRow, int newCol) {
-
-        if (!hasMoved && row == newRow && Math.abs(newCol - col) == 2) {
-            if (newCol > col) {
-
-                Rook rook = (Rook) Square.parentBoard.board[row][7].getPiece();
+        // check if move is castling
+        if (!hasMoved && row == newRow && Math.abs(newCol - col) == 2 && Square.parentBoard != null) {
+            if (newCol > col) { // short castling
                 Square rookSquare = Square.parentBoard.board[row][7];
-                Square newRookSquare = Square.parentBoard.board[row][col + 1];
-                rookSquare.removePiece();
-                newRookSquare.setPiece(rook);
-                rook.move(row, col + 1);
-            } else {
+                if (rookSquare != null && !rookSquare.isEmpty() && rookSquare.getPiece() instanceof Rook) {
+                    Rook rook = (Rook) rookSquare.getPiece();
+                    Square newRookSquare = Square.parentBoard.board[row][col + 1];
 
-                Rook rook = (Rook) Square.parentBoard.board[row][0].getPiece();
+                    rookSquare.removePiece();
+                    rook.row = row;
+                    rook.col = col + 1;
+                    newRookSquare.setPiece(rook);
+
+                    rook.hasMoved = true;
+                }
+            } else { // long castling
                 Square rookSquare = Square.parentBoard.board[row][0];
-                Square newRookSquare = Square.parentBoard.board[row][col - 1];
-                rookSquare.removePiece();
-                newRookSquare.setPiece(rook);
-                rook.move(row, col - 1);
+                if (rookSquare != null && !rookSquare.isEmpty() && rookSquare.getPiece() instanceof Rook) {
+                    Rook rook = (Rook) rookSquare.getPiece();
+                    Square newRookSquare = Square.parentBoard.board[row][col - 1];
+
+                    rookSquare.removePiece();
+                    rook.row = row;
+                    rook.col = col - 1;
+                    newRookSquare.setPiece(rook);
+
+                    rook.hasMoved = true;
+                }
             }
             hasCastled = true;
         }
+
+        // move king normally
         super.move(newRow, newCol);
         this.hasMoved = true;
     }
+
+
 
     @Override
     public King clone() {
         King k = new King(this.color, this.row, this.col, this.icon, this.safe);
         k.hasCastled = this.hasCastled;
+        k.hasMoved = this.hasMoved;
         return k;
     }
 }

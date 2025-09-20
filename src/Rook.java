@@ -40,15 +40,12 @@ public class Rook extends Piece {
         return false;
     }
 
-    @Override
-    void move(int newRow, int newCol) {
-        super.move(newRow, newCol);
-        // this.hasMoved=true;
-    }
 
     @Override
     public Rook clone() {
-
-        return new Rook(this.color, this.row, this.col, this.icon);
+        Rook r = new Rook(this.color, this.row, this.col, this.icon);
+        r.hasMoved = this.hasMoved;
+        return r;
     }
+
 }

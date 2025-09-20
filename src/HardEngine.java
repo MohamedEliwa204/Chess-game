@@ -555,14 +555,16 @@ public class HardEngine implements ChessEngine {
         Square[][] newBoard = new Square[8][8];
         King White_King = null;
         King Black_King = null;
+
+        // Clone the board
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-
                 newBoard[i][j] = new Square(null, originalBoard[i][j].c, i, j);
 
                 if (!originalBoard[i][j].isEmpty()) {
                     Piece ClonedPiece = originalBoard[i][j].getPiece().clone();
                     newBoard[i][j].setPiece(ClonedPiece);
+
                     if (ClonedPiece instanceof King) {
                         if (ClonedPiece.color.equals("White")) {
                             White_King = (King) ClonedPiece;
@@ -572,25 +574,57 @@ public class HardEngine implements ChessEngine {
                     }
                 }
             }
-
         }
 
+        // Move the chosen piece (safe version)
         Piece pieceToMove = newBoard[move.startRow][move.startCol].getPiece();
-
         if (pieceToMove != null) {
-            // THIS IS THE FIX: Tell the piece its new coordinates.
-            pieceToMove.move(move.endRow, move.endCol);
+            // Handle castling manually
+            if (pieceToMove instanceof King && Math.abs(move.endCol - move.startCol) == 2) {
+                if (move.endCol > move.startCol) { // short castling
+                    Piece rook = newBoard[move.startRow][7].getPiece();
+                    if (rook != null) {
+                        newBoard[move.startRow][7].removePiece();
+                        rook.row = move.startRow;
+                        rook.col = move.startCol + 1;
+                        newBoard[move.startRow][move.startCol + 1].setPiece(rook);
+                    }
+                } else { // long castling
+                    Piece rook = newBoard[move.startRow][0].getPiece();
+                    if (rook != null) {
+                        newBoard[move.startRow][0].removePiece();
+                        rook.row = move.startRow;
+                        rook.col = move.startCol - 1;
+                        newBoard[move.startRow][move.startCol - 1].setPiece(rook);
+                    }
+                }
+            }
+
+            // Move the main piece (king or otherwise)
+            pieceToMove.row = move.endRow;
+            pieceToMove.col = move.endCol;
 
             newBoard[move.startRow][move.startCol].removePiece();
             newBoard[move.endRow][move.endCol].setPiece(pieceToMove);
+
+            // Update king references
+            if (pieceToMove instanceof King) {
+                if (pieceToMove.color.equals("White")) {
+                    White_King = (King) pieceToMove;
+                } else {
+                    Black_King = (King) pieceToMove;
+                }
+            }
         }
+
         TheNewState.board = newBoard;
-        TheNewState.blackKing = Black_King;
         TheNewState.whiteKing = White_King;
+        TheNewState.blackKing = Black_King;
 
         return TheNewState;
-
     }
+
+
 
     @Override
     public Move findBestMove(Square[][] board, String aiColor) {

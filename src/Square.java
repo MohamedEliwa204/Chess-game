@@ -81,6 +81,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
         if (Manage.player.get_name().equals("Engine")) {
             return;
         }
+
         if (e.getSource() == this.button && this.getPiece() != null
                 && Manage.player.get_color().equals(this.piece.color)) {
 
@@ -190,7 +191,19 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                     Pawn pawn = (Pawn) promotedPawn;
                     GameLogic.PawnPromote(pawn, Square.parentBoard);
                 }
+
+
                 Manage.change_player();
+
+                GameState state = GameLogic.WinLoseDrawContinue(parentBoard.board, Manage.player.get_color().equals("White") ? "Black": "White");
+
+                if (state.state == 'L') {
+                    JOptionPane.showMessageDialog(parentBoard, opponentColor + " is checkmated!");
+                    return;
+                } else if (state.state == 'D') {
+                    JOptionPane.showMessageDialog(parentBoard, "Game is a draw (stalemate).");
+                    return;
+                }
 
             } else {
                 // setting the piece back to it's older place that's because the move isn't
@@ -219,7 +232,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
             }
 
             Dragged_Piece = null;
-            // Dragged_from_square = null;
+
         }
     }
 
