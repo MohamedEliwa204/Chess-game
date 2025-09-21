@@ -1,4 +1,4 @@
-name: Run Java App
+name: Build and Upload JAR
 
 on: [workflow_dispatch]
 
@@ -15,21 +15,22 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Compile
+      - name: Compile Java sources
         run: |
           mkdir -p out
           javac -d out $(find src -name "*.java")
-      - name: Compile
-        run: javac -cp src -d out $(find src -name "*.java")
 
       - name: Copy resources
-        run: cp -r src/resources out/
-      - name: Copy pieces
-        run: cp -r src/pieces out/
+        run: cp -r src/resources out/ || true
 
-      - name: Run with Virtual Display
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          
-          xvfb-run java -cp out App
+      - name: Copy pieces
+        run: cp -r src/pieces out/ || true
+
+      - name: Package JAR
+        run: jar --create --file chess.jar -C out .
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: chess-game
+          path: chess.jar
