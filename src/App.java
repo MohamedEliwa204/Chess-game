@@ -98,7 +98,18 @@ public class App implements ActionListener {
 
     public static void main(String[] args) throws Exception {
 
-        new App();
+        if (System.getenv("CI") != null) {
+            System.out.println("Running in GitHub Actions (CI mode).");
+            App app = new App();
+
+            // Auto-close after 3 seconds
+            new javax.swing.Timer(3000, e -> {
+                System.out.println("Exiting CI run...");
+                System.exit(0);
+            }).start();
+        } else {
+            new App();
+        }
 
     }
 
