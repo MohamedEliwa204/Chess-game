@@ -1,4 +1,4 @@
-name: Run Java App
+name: Build and Upload JAR
 
 on: [workflow_dispatch]
 
@@ -15,7 +15,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Compile
+      - name: Compile Java sources
         run: |
           mkdir -p out
           javac -d out $(find src -name "*.java")
@@ -25,24 +25,6 @@ jobs:
 
       - name: Copy pieces
         run: cp -r src/pieces out/ || true
-
-      - name: Run with Virtual Display and Capture Screenshot
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb imagemagick
-
-          # Start a virtual display in the background
-          Xvfb :99 -screen 0 1280x1024x24 &
-          export DISPLAY=:99
-
-          # Run your app (it will keep running, so put it in background)
-          java -cp out App &
-
-          # Give it some time to render
-          sleep 3
-
-          # Capture screenshot of the whole virtual screen
-          import -display :99 -window root screenshot.png
 
       - name: Package JAR
         run: jar --create --file chess.jar -C out .
