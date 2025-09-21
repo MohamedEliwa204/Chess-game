@@ -35,7 +35,7 @@ jobs:
           Xvfb :99 -screen 0 1280x1024x24 &
           export DISPLAY=:99
 
-          # Run your app (it should auto-exit after a few seconds in CI mode)
+          # Run your app (it will keep running, so put it in background)
           java -cp out App &
 
           # Give it some time to render
@@ -44,12 +44,11 @@ jobs:
           # Capture screenshot of the whole virtual screen
           import -display :99 -window root screenshot.png
 
-          - name: Package JAR
-            run: jar --create --file chess.jar -C out .
+      - name: Package JAR
+        run: jar --create --file chess.jar -C out .
 
-          - name: Upload JAR
-            uses: actions/upload-artifact@v4
-            with:
-            name: chess-game
-            path: chess.jar
-
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: chess-game
+          path: chess.jar
