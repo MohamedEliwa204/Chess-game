@@ -43,7 +43,9 @@ public class GameManage {
                     "Play Again");
 
             if (choice == JOptionPane.YES_OPTION) {
-                Manage.change_player();
+                if (opponentColor.equals("White")) {
+                    Manage.change_player();
+                }
                 controller.restart();
 
             } else {
