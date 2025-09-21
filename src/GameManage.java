@@ -2,7 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameManage {
-    public static void CheckingState(String opponentColor , Square[][] parent) {
+    public static App controller;
+
+    public GameManage(App controller) {
+        this.controller = controller;
+    }
+
+    public static void CheckingState(String opponentColor, Square[][] parent) {
 
         Piece king = opponentColor.equals("Black") ? GameLogic.Black_King : GameLogic.White_King;
 
@@ -37,9 +43,13 @@ public class GameManage {
                     "Play Again");
 
             if (choice == JOptionPane.YES_OPTION) {
-                // reset board
+                if (opponentColor.equals("White")) {
+                    Manage.change_player();
+                }
+                controller.restart();
+
             } else {
-                // go back to main menu
+                controller.backToMain();
             }
 
         } else {

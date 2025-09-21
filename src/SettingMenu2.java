@@ -91,7 +91,7 @@ public class SettingMenu2 extends JPanel implements ActionListener {
             spinnerTextField.setHorizontalAlignment(JTextField.CENTER);
         }
 
-        String[] options = { "Easy", "Medium", "Hard", "Legend" };
+        String[] options = { "Easy", "Medium", "Hard" };
         combo = new JComboBox<>(options);
         combo.setEditable(false);
         start.setFont(new Font("Georgia", Font.BOLD, 18));

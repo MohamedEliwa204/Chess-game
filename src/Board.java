@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -296,6 +297,26 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void updateTime() {
+        if (this.player_time1.getText().equals("00:00") || this.player_time2.getText().equals("00:00")) {
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    (this.player_time1.getText().equals("00:00") ? "White" : "Black") + " wins by Checkmate!",
+                    "Game Over",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[] { "Play Again", "Quit" },
+                    "Play Again");
+
+            if (choice == JOptionPane.YES_OPTION) {
+                if (this.player_time2.getText().equals("00:00")) {
+                    Manage.change_player();
+                }
+                controller.restart();
+            } else {
+                controller.backToMain();
+            }
+        }
         if (gameManager != null) {
             this.player_time1.setText(gameManager.get_player1().getTime());
             this.player_time2.setText(gameManager.get_player2().getTime());

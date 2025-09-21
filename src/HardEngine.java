@@ -624,8 +624,6 @@ public class HardEngine implements ChessEngine {
         return TheNewState;
     }
 
-
-
     @Override
     public Move findBestMove(Square[][] board, String aiColor) {
         boolean maximizing = true;

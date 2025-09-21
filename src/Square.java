@@ -189,19 +189,15 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
 
                 String opponentColor = currentColor.equals("White") ? "Black" : "White";
 
-
                 Piece promotedPawn = GameManage.isTherePromotion();
                 if (promotedPawn != null) {
                     Pawn pawn = (Pawn) promotedPawn;
                     GameLogic.PawnPromote(pawn, Square.parentBoard);
                 }
 
-
-                GameManage.CheckingState(opponentColor,Square.parentBoard.board);
-
+                GameManage.CheckingState(opponentColor, Square.parentBoard.board);
 
                 Manage.change_player();
-
 
             } else {
                 // setting the piece back to it's older place that's because the move isn't
@@ -209,7 +205,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 parentBoard.board[Dragged_row][Dragged_col].setPiece(Dragged_Piece);
             }
             if (Manage.player.get_name().equals("Engine")) {
-                Timer timer = new Timer(1000, new ActionListener() {
+                Timer timer = new Timer(500, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         Move move;
