@@ -79,6 +79,7 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
     public void mousePressed(MouseEvent e) {
         // must be a piece of the current player
         if (Manage.player.get_name().equals("Engine")) {
+
             return;
         }
 
@@ -170,6 +171,8 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 // and simple moves.
                 Board.moveStack.push(newMove);
 
+
+
                 // --- Now, update the board visually ---
 
                 // If a piece was captured, add it to the killed pieces panel.
@@ -219,6 +222,10 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                         }
                         Board.moveStack.push(move);
                         controller.MakeMove(move);
+
+                        GameManage.CheckingState("White", controller.board.board);
+
+
                         Manage.change_player();
                     }
                 });
