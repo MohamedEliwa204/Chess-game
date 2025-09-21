@@ -24,6 +24,8 @@ jobs:
 
       - name: Copy resources
         run: cp -r src/resources out/
+      - name: Copy pieces
+        run: cp -r src/pieces out/
 
       - name: Run with Virtual Display
         run: |
