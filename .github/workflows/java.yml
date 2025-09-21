@@ -19,6 +19,11 @@ jobs:
         run: |
           mkdir -p out
           javac -d out $(find src -name "*.java")
+      - name: Compile
+        run: javac -cp src -d out $(find src -name "*.java")
+
+      - name: Copy resources
+        run: cp -r src/resources out/
 
       - name: Run with Virtual Display
         run: |
