@@ -44,8 +44,12 @@ jobs:
           # Capture screenshot of the whole virtual screen
           import -display :99 -window root screenshot.png
 
-      - name: Upload Screenshot
-        uses: actions/upload-artifact@v4
-        with:
-          name: chess-screenshot
-          path: screenshot.png
+          - name: Package JAR
+            run: jar --create --file chess.jar -C out .
+
+          - name: Upload JAR
+            uses: actions/upload-artifact@v4
+            with:
+            name: chess-game
+            path: chess.jar
+
