@@ -30,7 +30,7 @@ public class App implements ActionListener {
 
     public App() {
         mainFrame = new JFrame("Elshewy&Gabr Chess Game!");
-        ImageIcon icon = new ImageIcon(getClass().getResource("/pieces/king-.jpg"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/resources/king.jpg"));
         Image img = icon.getImage();
         Image resized = img.getScaledInstance(10, 10, java.awt.Image.SCALE_SMOOTH);
         mainFrame.setLayout(new BorderLayout(0, 0));
