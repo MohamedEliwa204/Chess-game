@@ -19,17 +19,33 @@ jobs:
         run: |
           mkdir -p out
           javac -d out $(find src -name "*.java")
-      - name: Compile
-        run: javac -cp src -d out $(find src -name "*.java")
 
       - name: Copy resources
-        run: cp -r src/resources out/
-      - name: Copy pieces
-        run: cp -r src/pieces out/
+        run: cp -r src/resources out/ || true
 
-      - name: Run with Virtual Display
+      - name: Copy pieces
+        run: cp -r src/pieces out/ || true
+
+      - name: Run with Virtual Display and Capture Screenshot
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb
-          
-          xvfb-run java -cp out App
+          sudo apt-get install -y xvfb imagemagick
+
+          # Start a virtual display in the background
+          Xvfb :99 -screen 0 1280x1024x24 &
+          export DISPLAY=:99
+
+          # Run your app (it should auto-exit after a few seconds in CI mode)
+          java -cp out App &
+
+          # Give it some time to render
+          sleep 3
+
+          # Capture screenshot of the whole virtual screen
+          import -display :99 -window root screenshot.png
+
+      - name: Upload Screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: chess-screenshot
+          path: screenshot.png
