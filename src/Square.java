@@ -216,6 +216,12 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                         } else {
                             move = controller.hard.findBestMove(controller.board.board, "Black");
                         }
+
+                        if (move == null) {
+                            JOptionPane.showMessageDialog(null, "Game Over! Engine lost. You Won");
+                            return;
+                        }
+
                         Board.moveStack.push(move);
                         controller.MakeMove(move);
 
