@@ -2,11 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameManage {
-    public static void CheckingState(String opponentColor) {
-        Board parent = Square.parentBoard;
+    public static void CheckingState(String opponentColor , Square[][] parent) {
+
         Piece king = opponentColor.equals("Black") ? GameLogic.Black_King : GameLogic.White_King;
 
-        GameState gameState = GameLogic.WinLoseDrawContinue(parent.board, opponentColor);
+        GameState gameState = GameLogic.WinLoseDrawContinue(parent, opponentColor);
 
         if (gameState.state == 'C') {
             boolean hasKing = false;
@@ -14,17 +14,15 @@ public class GameManage {
                 for (int i = 0; i < GameLogic.possiblePieces.size(); i++) {
                     Piece piece = GameLogic.possiblePieces.get(i);
                     if (piece instanceof King) {
-                        parent.board[king.row][king.col].setBackground(Color.ORANGE);
+                        parent[king.row][king.col].setBackground(Color.ORANGE);
                         hasKing = true;
                         continue;
                     }
-                    parent.board[piece.row][piece.col].setBackground(Color.YELLOW);
+                    parent[piece.row][piece.col].setBackground(Color.YELLOW);
                 }
                 if (!hasKing) {
-                    parent.board[king.row][king.col].setBackground(Color.RED);
+                    parent[king.row][king.col].setBackground(Color.RED);
                 }
-            } else {
-                parent.clear_add_color();
             }
 
         } else if (gameState.state == 'L') {

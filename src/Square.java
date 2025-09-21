@@ -185,7 +185,8 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 String currentColor = Manage.player.get_color();
 
                 String opponentColor = currentColor.equals("White") ? "Black" : "White";
-                GameManage.CheckingState(opponentColor);
+
+
                 Piece promotedPawn = GameManage.isTherePromotion();
                 if (promotedPawn != null) {
                     Pawn pawn = (Pawn) promotedPawn;
@@ -193,17 +194,11 @@ public class Square extends JLabel implements MouseMotionListener, MouseListener
                 }
 
 
+                GameManage.CheckingState(opponentColor,Square.parentBoard.board);
+
+
                 Manage.change_player();
 
-                GameState state = GameLogic.WinLoseDrawContinue(parentBoard.board, Manage.player.get_color().equals("White") ? "Black": "White");
-
-                if (state.state == 'L') {
-                    JOptionPane.showMessageDialog(parentBoard, opponentColor + " is checkmated!");
-                    return;
-                } else if (state.state == 'D') {
-                    JOptionPane.showMessageDialog(parentBoard, "Game is a draw (stalemate).");
-                    return;
-                }
 
             } else {
                 // setting the piece back to it's older place that's because the move isn't

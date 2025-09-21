@@ -1,23 +1,17 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
+
 import java.awt.Image;
-import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ButtonGroup;
+
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+
 
 public class App implements ActionListener {
     private final CardLayout cardLayout;
