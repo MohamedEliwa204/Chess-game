@@ -6,12 +6,10 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 import javax.swing.ImageIcon;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 
 public class App implements ActionListener {
     private final CardLayout cardLayout;
@@ -28,6 +26,8 @@ public class App implements ActionListener {
     HardEngine hard;
     String level;
 
+    GameManage gamemanage;
+
     public App() {
         mainFrame = new JFrame("Elshewy&Gabr Chess Game!");
         ImageIcon icon = new ImageIcon(getClass().getResource("/pieces/king-.jpg"));
@@ -42,6 +42,7 @@ public class App implements ActionListener {
         mainMenu = new MainMenu(this);
         settingMenu = new SettingMenu(this);
         settingMenu2 = new SettingMenu2(this);
+        gamemanage = new GameManage(this);
         board = new Board(this);
 
         cardLayout = new CardLayout();
