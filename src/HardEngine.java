@@ -482,30 +482,30 @@ public class HardEngine implements ChessEngine {
 
         boolean isEndGame = GamePhase.isEndgame(board);
 
-        // 🟢 Material
+        //  Material
         score += MaterialBalance(board);
 
-        // 🟢 King safety
+        // King safety
         score += KingSafety(state, isEndGame);
 
-        // 🟢 Piece-square tables
+        //  Piece-square tables
         score += PST(board);
 
-        // 🟢 Mobility (Black - White)
+        //  Mobility (Black - White)
         score += Mobility(board, true) - Mobility(board, false);
 
-        // 🟢 Pawn structure
+        //  Pawn structure
         score += evaluatePassedPawns(board);
         score += evaluateDoubledPawns(board);
         score += evaluateIsolatedPawns(board);
 
-        // 🟢 Bishop pair
+        //  Bishop pair
         score += evaluateBishopPair(board);
 
-        // 🟢 Rook activity (files)
+        //  Rook activity (files)
         score += evaluateRookFiles(board);
 
-        // 🟢 Center control
+        //  Center control
         score += CenterControl(board);
 
         return score;
