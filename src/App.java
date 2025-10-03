@@ -29,6 +29,7 @@ public class App implements ActionListener {
     GameManage gamemanage;
 
     public App() {
+                // Create the main application window with a title identifying the chess game and its authors.
         mainFrame = new JFrame("Elshewy&Gabr Chess Game!");
         ImageIcon icon = new ImageIcon(getClass().getResource("/resources/king.jpg"));
         Image img = icon.getImage();
